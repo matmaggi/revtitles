@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RevTitles · Revisor de legendas</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" %3E%3Cdefs%3E%3ClinearGradient id="lg" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="%236366f1"/%3E%3Cstop offset="1" stop-color="%23a855f7"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x="2" y="5" width="44" height="33" rx="9" fill="url%28%23lg%29"/%3E%3Crect x="9" y="12" width="17" height="3.6" rx="1.8" fill="%23fff" opacity=".55"/%3E%3Crect x="9" y="21" width="30" height="4.6" rx="2.3" fill="%23fff"/%3E%3Crect x="14" y="29" width="20" height="4.6" rx="2.3" fill="%23fff" opacity=".85"/%3E%3Ccircle cx="38" cy="37" r="9.5" fill="%2322c55e" stroke="%23fff" stroke-width="3"/%3E%3Cpath d="M33.4 37.2l3.1 3.1 5.6-6.4" stroke="%23fff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E">
+<style>
+:root{
+--bg:#f6f6f4;--card:#fff;--tx:#1f2328;--mut:#6b7280;--bd:#e2e2dd;--ac:#2f6fed;--ac-tx:#fff;
+--c1:#fde8e8;--c1t:#9b1c1c;--c2:#fef3c7;--c2t:#92400e;--c3:#e0ecff;--c3t:#1e429f;--c4:#e6f4ea;--c4t:#1e6b3a}
+@media (prefers-color-scheme:dark){:root{--bg:#16181c;--card:#1f2228;--tx:#e8e9eb;--mut:#9aa0a8;--bd:#32363e;--ac:#5b8def;
+--c1:#4a1f1f;--c1t:#fca5a5;--c2:#4a3a14;--c2t:#fcd34d;--c3:#1e2f55;--c3t:#a8c4ff;--c4:#1c3a28;--c4t:#8fd9a8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:1.6rem;margin:0 0 4px}
+p.sub{color:var(--mut);margin:0 0 20px}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:16px}
+#drop{border:2px dashed var(--bd);text-align:center;padding:32px 16px;cursor:pointer;border-radius:12px}
+#drop.over{border-color:var(--ac)}
+#drop b{display:block;margin-bottom:4px}
+label.ck{display:block;margin:6px 0}
+button{background:var(--ac);color:var(--ac-tx);border:0;border-radius:8px;padding:10px 16px;font-size:1rem;cursor:pointer}
+button.sec{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+button:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#status{color:var(--mut);margin:8px 0}
+.cue{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.cue h3{margin:0 0 6px;font-size:.9rem;color:var(--mut);font-weight:600}
+.txt{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);padding:8px 10px;border-radius:6px;white-space:pre-wrap;margin-bottom:8px}
+.iss{margin:4px 0;font-size:.95rem}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.03em;padding:2px 7px;border-radius:99px;margin-right:6px}
+#sum{font-weight:600}
+button.mini{background:transparent;color:var(--mut);border:1px solid var(--bd);border-radius:6px;padding:1px 8px;font-size:.75rem;margin-left:8px;cursor:pointer}
+button.mini:hover{color:var(--tx)}
+details{margin-top:10px}
+.ig{display:flex;gap:8px;align-items:center;margin:4px 0;font-size:.9rem}
+h1{display:flex;align-items:center;gap:8px}
+.cue{border-left:6px solid var(--gs,var(--bd))}
+.tag{background:var(--gb);color:var(--gt);border:1px solid var(--gs)}
+mark{background:var(--gb);color:inherit;border-bottom:2px solid var(--gs);border-radius:3px;padding:0 2px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--gs);margin-left:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
+.chip{background:var(--gb,var(--card));color:var(--gt,var(--tx));border:1px solid var(--gs,var(--bd));border-radius:99px;padding:4px 12px;font-size:.85rem;cursor:pointer}
+.chip.on{box-shadow:0 0 0 2px var(--ac)}
+.bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--bd);margin:8px 0 12px}
+.bar span{background:var(--gs)}
+label.sl{color:var(--mut);font-size:.9rem}
+select{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:1rem}
+.cc{--gb:hsl(var(--h) 85% 92%);--gt:hsl(var(--h) 70% 25%);--gs:hsl(var(--h) 75% 48%)}
+@media (prefers-color-scheme:dark){.cc{--gb:hsl(var(--h) 40% 22%);--gt:hsl(var(--h) 90% 82%);--gs:hsl(var(--h) 75% 62%)}}
+.cue h3{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sug{margin:6px 0 8px;padding:8px 10px;background:var(--bg);border-radius:8px;font-size:.9rem}
+.sug .txt.novo{margin:6px 0;background:var(--card);border:1px dashed var(--gs)}
+.sugt{color:var(--mut);margin:4px 0}
+button.mini.ok{background:var(--ac);color:var(--ac-tx);border-color:var(--ac)}
+.ed{width:100%;font:.95rem ui-monospace,Menlo,Consolas,monospace;padding:8px 10px;border-radius:6px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+.acts{margin:6px 0}
+.logo{width:50px;height:50px;flex:none}
+.wm{font-size:2rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.wm .rev{background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag2{font-size:.8rem;font-weight:500;color:var(--mut);letter-spacing:.02em}
+h1{gap:12px;margin-bottom:6px}
+.badge{font-size:.7rem;font-weight:700;border:1px solid var(--bd);border-radius:99px;padding:1px 8px;margin-left:8px;color:var(--mut)}
+.nota{font-size:.85rem;color:var(--mut);margin:4px 0 6px}
+.tabs{display:flex;gap:6px;margin:14px 0 16px;border-bottom:1px solid var(--bd)}
+button.tab{background:transparent;color:var(--mut);border:0;border-bottom:3px solid transparent;border-radius:0;padding:8px 14px;font-weight:600}
+button.tab.on{color:var(--tx);border-bottom-color:var(--ac)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:600px){.row2{grid-template-columns:1fr}}
+.dz{border:2px dashed var(--bd);border-radius:12px;padding:20px 12px;text-align:center;cursor:pointer}
+.dz.over{border-color:var(--ac)}.dz.ok{border-style:solid;border-color:var(--ac)}
+.dz b{display:block}.dz span{color:var(--mut);font-size:.9rem}
+input.tx{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:.95rem}
+.en{background:transparent;border:1px dashed var(--bd);color:var(--mut)}
+.lbl{font-size:.7rem;font-weight:700;color:var(--mut);letter-spacing:.04em;margin:2px 0}
+.ia{font-size:.65rem;font-weight:700;border-radius:99px;padding:1px 6px;margin-left:6px;background:var(--ac);color:var(--ac-tx)}
+[hidden]{display:none!important}
+.uso{margin:6px 0 0;font-size:.9rem;font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<h1><svg class="logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logotipo RevTitles">
+<defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+<rect x="2" y="5" width="44" height="33" rx="9" fill="url(#lg)"/>
+<rect x="9" y="12" width="17" height="3.6" rx="1.8" fill="#fff" opacity=".55"/>
+<rect x="9" y="21" width="30" height="4.6" rx="2.3" fill="#fff"/>
+<rect x="14" y="29" width="20" height="4.6" rx="2.3" fill="#fff" opacity=".85"/>
+<circle cx="38" cy="37" r="9.5" fill="#22c55e" style="stroke:var(--bg);stroke-width:3"/>
+<path d="M33.4 37.2l3.1 3.1 5.6-6.4" stroke="#fff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg><span><span class="wm"><span class="rev">Rev</span>Titles</span><br><span class="tag2">Revisor de legendas em português</span></span></h1>
+<p class="sub">Confere ortografia, gramática, pontuação e as regras do guia de estilo de legendas em português do Brasil da Netflix. Aceita SRT, DFXP, PXTT, TTML e TTAL.</p>
+
+<nav class="tabs"><button class="tab on" data-t="tabRev">Revisão</button><button class="tab" data-t="tabCmp">Comparador com IA</button></nav>
+<div id="tabRev">
+<div class="box">
+  <div id="drop"><b>Clique aqui ou arraste o arquivo de legenda</b><span id="fname" style="color:var(--mut)">Nenhum arquivo escolhido (SRT, DFXP, PXTT, TTML ou TTAL)</span></div>
+  <input type="file" id="file" accept=".srt,.dfxp,.pxtt,.ttml,.xml,.ttal,.json,.txt" hidden>
+  <div style="margin-top:12px">
+    <label class="ck"><input type="checkbox" id="optLT" checked> Verificar ortografia e gramática (usa a internet — serviço gratuito LanguageTool)</label>
+    <label class="ck"><input type="checkbox" id="optNames" checked> Ignorar palavras desconhecidas que começam com maiúscula (nomes próprios)</label>
+  </div>
+  <div class="row" style="margin:12px 0 4px">
+    <label class="sl">Perfil <select id="perfil"><option value="17,0">Legenda comum, adulto (17 car./s)</option><option value="13,0">Legenda comum, infantil (13 car./s)</option><option value="20,1">SDH, adulto (20 car./s)</option><option value="17,1">SDH, infantil (17 car./s)</option></select></label>
+    <label class="sl">Quadros/s <select id="fps"><option value="24">24 (23,976)</option><option value="25">25</option><option value="30">30 (29,97)</option></select></label>
+  </div>
+  <label class="ck"><input type="checkbox" id="optColq"> Avisar sobre linguagem muito coloquial (né, pra, tá…)</label>
+  <div class="row" style="margin-top:12px"><button id="go" disabled>Revisar legenda</button></div>
+  <div id="status"></div>
+</div>
+
+<div id="out" hidden>
+  <div class="box">
+    <div id="sum"></div>
+    <div class="bar" id="bar"></div>
+    <div class="chips" id="chips"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="sec" id="dlRep">Baixar relatório (.txt)</button>
+      <button class="sec" id="undo" disabled>↩ Desfazer</button>
+      <button class="sec" id="dlFix">Baixar legenda com minhas alterações</button>
+      <button class="sec" id="dlSrt" hidden>Baixar como .srt</button>
+    </div>
+    <div style="color:var(--mut);font-size:.85rem;margin-top:8px">Para cada apontamento você decide: aplicar a sugestão (quando houver), ignorar o tipo ou editar o texto da legenda à mão. A legenda baixada reflete só o que você aplicou.</div>
+    <details id="igd" hidden><summary id="igs"></summary><div id="igl"></div></details>
+  </div>
+  <div id="list"></div>
+</div>
+</div>
+<div id="tabCmp" hidden>
+  <div class="box">
+    <div class="row2">
+      <div class="dz" id="dzT"><b>Template (opcional)</b><span id="nT">legenda no idioma original, ex.: inglês</span></div>
+      <div class="dz" id="dzP"><b>Legenda em português</b><span id="nP">obrigatória</span></div>
+    </div>
+    <input type="file" id="fT" hidden accept=".srt,.dfxp,.pxtt,.ttml,.xml,.ttal,.json,.txt"><input type="file" id="fP" hidden accept=".srt,.dfxp,.pxtt,.ttml,.xml,.ttal,.json,.txt">
+    <div class="aibox">
+      <div class="row">
+        <label class="sl">Serviço de IA <select id="aiProv">
+          <option value="gemini">Gemini (Google) · plano gratuito</option>
+          <option value="groq">Groq · plano gratuito</option>
+          <option value="openrouter">OpenRouter · modelos gratuitos</option>
+          <option value="anthropic">Claude (Anthropic)</option>
+          <option value="openai">ChatGPT (OpenAI)</option>
+          <option value="custom">Outro compatível com OpenAI (Ollama, Mistral, DeepSeek…)</option>
+        </select></label>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <input class="tx" type="password" id="aiKey" placeholder="Chave da API" size="28">
+        <input class="tx" id="aiModel" list="aiModels" placeholder="Modelo" size="26"><datalist id="aiModels"></datalist>
+        <button class="sec" id="aiList" type="button">Buscar modelos</button>
+      </div>
+      <div class="row" id="aiBaseRow" style="margin-top:8px" hidden><input class="tx" id="aiBase" size="44" placeholder="Endereço base (ex.: http://localhost:11434/v1)"></div>
+      <div class="nota" id="aiNote"></div>
+      <div class="row" style="margin-top:8px"><span class="sl">Preço por 1 milhão de tokens (US$):</span>
+        <input class="tx" type="number" step="any" min="0" id="aiPin" placeholder="entrada" style="width:7em">
+        <input class="tx" type="number" step="any" min="0" id="aiPout" placeholder="saída" style="width:7em">
+        <span class="sl">Cotação (R$ por US$):</span><input class="tx" type="number" step="any" min="0" id="aiFx" placeholder="ex.: 5,50" style="width:7em"></div>
+      <div class="nota" id="aiPnote"></div>
+      <div class="row"><input class="tx" type="number" id="aiMax" placeholder="Só as N primeiras (teste)" min="1" style="width:13em"><label class="ck" style="margin:0"><input type="checkbox" id="aiMem"> Lembrar a chave neste navegador</label></div>
+      <p style="color:var(--mut);font-size:.85rem;margin:8px 0 0">Os textos das legendas são enviados ao serviço escolhido. A chave fica só na memória desta página, a menos que você marque “lembrar”.</p>
+    </div>
+    <div class="row" style="margin-top:12px"><button id="cmpGo" disabled>Comparar com IA</button><button class="sec" id="cmpStop" hidden>Parar</button></div>
+    <div id="cmpStatus" style="color:var(--mut);margin:8px 0"></div>
+    <div id="cmpUso" class="uso"></div>
+  </div>
+  <div id="cmpOut" hidden>
+    <div class="box">
+      <div id="cmpSum" style="font-weight:600"></div>
+      <div class="bar" id="cmpBar"></div>
+      <div class="chips" id="cmpChips"></div>
+      <div class="row"><button class="sec" id="cmpRep">Baixar relatório (.txt)</button></div>
+    </div>
+    <div id="cmpList"></div>
+  </div>
+</div>
+</main>
+
+<script>
+const MAX_CHARS=42, MAX_LINHAS=2, DUR_MAX=7;
+const TAG=/<\/?[a-zA-Z][^>]*>|\{\\[^}]*\}/g;
+let cues=[], erros=[], nomeArq="legenda", lastRep="";
+const $=id=>document.getElementById(id);
+
+// ---------- arquivo ----------
+const drop=$("drop"), inp=$("file");
+drop.onclick=()=>inp.click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add("over")};
+drop.ondragleave=()=>drop.classList.remove("over");
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove("over");if(e.dataTransfer.files[0])carregar(e.dataTransfer.files[0])};
+inp.onchange=()=>{if(inp.files[0])carregar(inp.files[0])};
+let bruto="";
+function carregar(f){
+  nomeArq=f.name.replace(/\.[^.]+$/,"");extArq=(f.name.match(/\.([^.]+)$/)||[,"srt"])[1].toLowerCase();ign={};hist=[];editando=null;filtro.clear();$("out").hidden=true;
+  $("fname").textContent=f.name;
+  f.arrayBuffer().then(buf=>{
+    try{bruto=new TextDecoder("utf-8",{fatal:true}).decode(buf)}
+    catch(e){bruto=new TextDecoder("windows-1252").decode(buf)}
+    const r=abrir();
+    if(arq.fps)$("fps").value=arq.fps>=29?"30":arq.fps>=24.5?"25":"24";
+    const nome=arq.tipo==="ttml"?extArq.toUpperCase():arq.nome;
+    atualizaBotoes();
+    $("fname").textContent=f.name+` · ${nome}, ${cues.length} legendas`+(arq.fps?`, ${Math.round(arq.fps*1000)/1000} quadros/s`:"");
+    $("go").disabled=!cues.length;
+    $("status").textContent=cues.length?"Arquivo carregado. Clique em “Revisar legenda”.":(r.erros[0]||"Não encontrei nenhuma legenda válida nesse arquivo.");
+  });
+}
+
+// ---------- leitura do SRT ----------
+const TEMPO=/(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})\s*-->\s*(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})/;
+const sec=(h,m,s,ms)=>+h*3600+ +m*60+ +s+ +ms.padEnd(3,"0")/1000;
+function fmt(t){let ms=Math.round(t*1000);const h=Math.floor(ms/3600000);ms%=3600000;const m=Math.floor(ms/60000);ms%=60000;const s=Math.floor(ms/1000);ms%=1000;
+  return [h,m,s].map(x=>String(x).padStart(2,"0")).join(":")+","+String(ms).padStart(3,"0")}
+function lerSrt(txt){
+  txt=txt.replace(/^\uFEFF/,"").replace(/\r\n?/g,"\n").trim();
+  const res=[],err=[];
+  txt.split(/\n\s*\n/).forEach((b,i)=>{
+    const L=b.split("\n");
+    if(L.length<2){err.push(`Bloco ${i+1}: formato inválido (muito curto).`);return}
+    let num=parseInt(L[0]),k=1;if(isNaN(num)||!/^\s*\d+\s*$/.test(L[0])){num=i+1;k=0}
+    const m=TEMPO.exec(L[k]);
+    if(!m){err.push(`Bloco ${i+1}: linha de tempo inválida: “${L[k]}”`);return}
+    res.push({num,ini:sec(...m.slice(1,5)),fim:sec(...m.slice(5,9)),linhas:L.slice(k+1),p:[],lt:[]});
+  });
+  return [res,err];
+}
+const limpo=c=>c.linhas.join("\n").replace(TAG,"");
+
+// ---------- formatos de legenda (SRT, TTML/DFXP/PXTT, TTAL) ----------
+let arq={tipo:"srt"},modoT="ms",nomT=24,extArq="srt",limite=150;
+const ENT={amp:"&",lt:"<",gt:">",quot:'"',apos:"'",nbsp:"\u00a0"};
+const decEnt=s=>s.replace(/&(#x[0-9a-f]+|#\d+|\w+);/gi,(m,e)=>{
+  if(e[0]==="#"){const n=e[1].toLowerCase()==="x"?parseInt(e.slice(2),16):parseInt(e.slice(1),10);return String.fromCodePoint(n)}
+  return ENT[e]!==undefined?ENT[e]:m});
+const encEnt=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const pad=(n,l=2)=>String(n).padStart(l,"0");
+function fmtTC(sec){const tot=Math.round(sec*nomT),s=Math.floor(tot/nomT),f=tot-s*nomT;
+  return `${pad(Math.floor(s/3600))}:${pad(Math.floor(s/60)%60)}:${pad(s%60)}:${pad(f)}`}
+const fmtT=sec=>modoT==="tc"?fmtTC(sec):fmt(sec);
+function finalizar(cues){cues.forEach(c=>{c.orig=c.linhas.join("\n");c.fim0=c.fim});return cues}
+
+// TTAL (JSON): estilos em intervalos de caracteres <-> tags <i>
+function aTags(txt,styles){
+  const R=styles.filter(s=>s.type==="italic").sort((a,b)=>a.from-b.from);let o="",pos=0;
+  for(const r of R){if(r.from<pos||r.to<=r.from)continue;o+=txt.slice(pos,r.from)+"<i>"+txt.slice(r.from,r.to)+"</i>";pos=r.to}
+  return o+txt.slice(pos);
+}
+function deTags(t){
+  let plain="",styles=[],ab=-1;
+  for(const m of t.matchAll(/<\/?i>|<[^>]*>|[^<]+|</gi)){
+    const s=m[0].toLowerCase();
+    if(s==="<i>"){if(ab<0)ab=plain.length}
+    else if(s==="</i>"){if(ab>=0){if(plain.length>ab)styles.push({from:ab,to:plain.length,type:"italic"});ab=-1}}
+    else if(s[0]==="<"&&s.length>1){}
+    else plain+=m[0];
+  }
+  if(ab>=0&&plain.length>ab)styles.push({from:ab,to:plain.length,type:"italic"});
+  return{txt:plain,styles};
+}
+function lerTTAL(t){
+  let d;try{d=JSON.parse(t)}catch(e){return{cues:[],erros:["Arquivo TTAL inválido: "+e.message],arq:null}}
+  const evs=d.events||{},fpsTxt=String((d.meta&&d.meta.fps)||"").replace(/\D/g,"");
+  const fps=({"2397":23.976,"2398":23.976,"24":24,"25":25,"2997":29.97,"30":30,"5994":59.94,"50":50,"60":60})[fpsTxt]||24;
+  const nom=Math.round(fps);
+  const ids=Object.keys(evs).sort((a,b)=>evs[a].start-evs[b].start||evs[a].end-evs[b].end);
+  const cues=ids.map((id,i)=>{
+    const e=evs[id],notas=Object.values(e.annotations||{}).map(a=>a&&a.description).filter(Boolean);
+    return{num:i+1,ini:e.start/nom,fim:e.end/nom,linhas:aTags(e.txt||"",e.styles||[]).split("\n"),p:[],lt:[],ref:id,
+      forcada:e.type==="fn",nota:notas.join(" · "),pos:e.rgn==="top"?"top":""};
+  });
+  return{cues:finalizar(cues),erros:[],arq:{tipo:"ttal",nome:"TTAL",modo:"tc",nom,fps,doc:d}};
+}
+function exportarTTAL(){
+  const d=JSON.parse(JSON.stringify(arq.doc));
+  for(const c of cues){
+    const e=d.events[c.ref];if(!e)continue;const txt=c.linhas.join("\n");
+    if(txt!==c.orig){const r=deTags(txt);e.txt=r.txt;e.styles=r.styles}
+    if(Math.abs(c.fim-c.fim0)>0.0005)e.end=Math.round(c.fim*arq.nom);
+  }
+  return JSON.stringify(d,null,2);
+}
+
+// TTML (DFXP, PXTT e variantes)
+const attrs=s=>{const o={};for(const m of s.matchAll(/([\w:.-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g))o[m[1]]=m[2]!==undefined?m[2]:m[3];return o};
+function tempoTTML(s,nom,tick){
+  s=String(s).trim();let m;
+  if((m=/^(\d+):(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?$/.exec(s)))return+m[1]*3600+ +m[2]*60+ +m[3]+(+m[4]+(m[5]?+("0."+m[5]):0))/nom;
+  if((m=/^(\d+):(\d{2}):(\d{2})(?:[.,](\d+))?$/.exec(s)))return+m[1]*3600+ +m[2]*60+ +m[3]+(m[4]?+("0."+m[4]):0);
+  if((m=/^(\d+(?:\.\d+)?)(h|ms|m|s|f|t)$/.exec(s))){const v=+m[1];return({h:v*3600,m:v*60,s:v,ms:v/1000,f:v/nom,t:v/tick})[m[2]]}
+  return NaN;
+}
+function fmtTTML(sec,ref,nom,tick){
+  if(/^\d+:\d{2}:\d{2}:\d{2}/.test(ref)){const tot=Math.round(sec*nom),s=Math.floor(tot/nom),f=tot-s*nom;
+    return `${pad(Math.floor(s/3600))}:${pad(Math.floor(s/60)%60)}:${pad(s%60)}:${pad(f)}`}
+  if(/\dt$/.test(ref))return Math.round(sec*tick)+"t";
+  if(/ms$/.test(ref))return Math.round(sec*1000)+"ms";
+  if(/^[\d.]+s$/.test(ref))return(Math.round(sec*1000)/1000)+"s";
+  let ms=Math.round(sec*1000);const h=Math.floor(ms/3600000);ms%=3600000;const m=Math.floor(ms/60000);ms%=60000;const s=Math.floor(ms/1000);ms%=1000;
+  return `${pad(h)}:${pad(m)}:${pad(s)}.${pad(ms,3)}`;
+}
+function lerTTML(src){
+  const bi=src.search(/<body\b/i),corpo=bi>=0?bi:0,head=src.slice(0,corpo);
+  const val=(re,def)=>{const m=re.exec(head);return m?m[1]:def};
+  const nom=Math.round(parseFloat(val(/ttp:frameRate\s*=\s*"([^"]+)"/,"30"))||30);
+  const mul=val(/ttp:frameRateMultiplier\s*=\s*"([^"]+)"/,"1 1").trim().split(/\s+/).map(Number);
+  const fps=nom*(mul[0]/(mul[1]||1));
+  const tick=parseFloat(val(/ttp:tickRate\s*=\s*"([^"]+)"/,"10000000"))||10000000;
+  const italIds=new Set();
+  for(const m of head.matchAll(/<style\b([^>]*?)\/?>/g)){const a=attrs(m[1]);if(/italic|oblique/i.test(a["tts:fontStyle"]||"")&&a["xml:id"])italIds.add(a["xml:id"])}
+  const E={italId:italIds.size?[...italIds][0]:null,normId:/xml:id\s*=\s*"span"/.test(head)?"span":null};
+  const re=/<p\b([^>]*?)(?:\/>|>([\s\S]*?)<\/p>)/g;re.lastIndex=corpo;
+  const cues=[],erros=[];let m,k=0,tc=false;
+  while((m=re.exec(src))){
+    k++;const a=attrs(m[1]);if(a.begin===undefined)continue;
+    const ini=tempoTTML(a.begin,nom,tick);
+    const fim=a.end!==undefined?tempoTTML(a.end,nom,tick):(a.dur!==undefined?ini+tempoTTML(a.dur,nom,tick):NaN);
+    if(isNaN(ini)||isNaN(fim)){erros.push(`Parágrafo ${k}: tempo não reconhecido (${a.begin} → ${a.end}).`);continue}
+    if(/^\d+:\d{2}:\d{2}:\d{2}/.test(a.begin))tc=true;
+    const inner=m[2]||"",metas=[];
+    const resto=inner.replace(/<metadata\b[\s\S]*?<\/metadata>/gi,mm=>{metas.push(mm);return""});
+    const tags=[...metas.join("").matchAll(/<ttm:item\b[^>]*>([^<]*)<\/ttm:item>/g)].map(x=>x[1].trim());
+    let out="",st=[],ital=0;
+    for(const tk of resto.matchAll(/<(\/?)(span|br)\b([^>]*?)(\/?)>|<[^>]*>|([^<]+)/gi)){
+      if(tk[5]!==undefined){const s=decEnt(tk[5]);if(!s.trim()){if(!/\n/.test(s))out+=" "}else out+=s.replace(/\s*\n\s*/g," ");continue}
+      const nome=(tk[2]||"").toLowerCase();if(!nome)continue;
+      if(nome==="br"){out+="\n";continue}
+      if(tk[1]){const it=st.pop();if(it){ital--;if(!ital)out+="</i>"}}
+      else if(tk[4]!=="/"){const aa=attrs(tk[3]),it=/italic|oblique/i.test(aa["tts:fontStyle"]||"")||(aa.style&&italIds.has(aa.style));
+        st.push(!!it);if(it){if(!ital)out+="<i>";ital++}}
+    }
+    if(ital>0)out+="</i>";
+    let L=out.split("\n").map(l=>l.replace(/[ \t]+/g," ").replace(/<i>\s*<\/i>/g,"").trim()).filter(l=>l);
+    if(!L.length)L=[""];
+    cues.push({num:cues.length+1,ini,fim,linhas:L,p:[],lt:[],
+      ref:{ini:m.index,fim:m.index+m[0].length,attrs:m[1],meta:metas.join(""),endStr:a.end!==undefined?a.end:null},
+      forcada:tags.includes("x-forced"),nota:"",pos:/top|before/i.test(a.region||"")?"top":""});
+  }
+  return{cues:finalizar(cues),erros,arq:{tipo:"ttml",nome:"TTML",modo:tc?"tc":"ms",nom,tick,fps,src,estilo:E}};
+}
+function toXml(texto,E){
+  const seg=(t,it)=>{if(!t)return"";const x=encEnt(t);
+    if(it)return E.italId?`<span style="${E.italId}">${x}</span>`:`<span tts:fontStyle="italic">${x}</span>`;
+    return E.normId?`<span style="${E.normId}">${x}</span>`:x};
+  let out="",buf="",it=false;const flush=()=>{out+=seg(buf,it);buf=""};
+  for(const m of texto.matchAll(/<\/?i>|<[^>]*>|\n|[^<\n]+|</gi)){
+    const s=m[0],l=s.toLowerCase();
+    if(s==="\n"){flush();out+="<br/>"}
+    else if(l==="<i>"){flush();it=true}
+    else if(l==="</i>"){flush();it=false}
+    else if(s[0]==="<"&&s.length>1){}
+    else buf+=s;
+  }
+  flush();return out;
+}
+function exportarTTML(){
+  const A=arq,subs=[];
+  for(const c of cues){
+    const r=c.ref;if(!r)continue;
+    const mt=c.linhas.join("\n")!==c.orig,mf=Math.abs(c.fim-c.fim0)>0.0005;if(!mt&&!mf)continue;
+    const orig=A.src.slice(r.ini,r.fim);let at=r.attrs;
+    if(mf&&r.endStr!==null)at=at.replace(/(\bend\s*=\s*)(["'])[^"']*\2/,(x,a,q)=>a+q+fmtTTML(c.fim,r.endStr,A.nom,A.tick)+q);
+    let novo;
+    if(mt)novo=`<p${at}>${r.meta}${toXml(c.linhas.join("\n"),A.estilo)}</p>`;
+    else novo=orig.replace(r.attrs,at);
+    subs.push([r.ini,r.fim,novo]);
+  }
+  let out=A.src;subs.sort((a,b)=>b[0]-a[0]);
+  for(const [i,f,t] of subs)out=out.slice(0,i)+t+out.slice(f);
+  return out;
+}
+function lerArquivo(txt){
+  const t=txt.replace(/^\uFEFF/,"").trimStart();
+  if(t[0]==="{")return lerTTAL(t);
+  if(t[0]==="<")return lerTTML(t);
+  const [cues,erros]=lerSrt(txt);
+  return{cues:finalizar(cues),erros,arq:{tipo:"srt",nome:"SRT",modo:"ms",nom:24,fps:null}};
+}
+function abrir(){
+  const r=lerArquivo(bruto);cues=r.cues;erros=r.erros;arq=r.arq||{tipo:"srt",nome:"?"};
+  modoT=arq.modo||"ms";nomT=arq.nom||24;return r;
+}
+function exportarOriginal(){
+  if(arq.tipo==="ttal")return{ext:extArq||"ttal",conteudo:exportarTTAL()};
+  if(arq.tipo==="ttml")return{ext:extArq||"dfxp",conteudo:exportarTTML()};
+  return{ext:"srt",conteudo:srtAtual()};
+}
+function atualizaBotoes(){
+  const fora=arq.tipo!=="srt";
+  $("dlSrt").hidden=!fora;
+  $("dlFix").textContent=fora?`Baixar com minhas alterações (.${extArq||"txt"})`:"Baixar legenda com minhas alterações (.srt)";
+}
+
+// ---------- checagens ----------
+const cfg={cps:17,sdh:false,fps:24,colq:false};
+function lerCfg(){const [c,s]=$("perfil").value.split(",");cfg.cps=+c;cfg.sdh=s==="1";cfg.fps=+$("fps").value;cfg.colq=$("optColq").checked}
+const REP_OK=new Set(["que","nunca","muito","bem","não","sim","ah","oh","ha","há","tá","já","vem","vai","pare","fogo"]);
+const FRACAS=new Set("o a os as um uma uns umas de do da dos das em no na nos nas com para pra por pelo pela pelos pelas e ou mas que se não me te lhe eu tu ele ela você vocês nós eles elas ao aos à às sem sobre até como quando porque".split(" "));
+const SEQ=new Set("sala capítulo parte canal episódio temporada número nº página pág artigo andar quarto lugar fase nível ato volume rua apartamento bloco dia round classe grau item linha fila mesa pista às".split(" "));
+const UNID=new Set("anos ano h min km cm mm m kg g reais dólares euros graus mil milhão milhões bilhão bilhões".split(" "));
+const MESES=new Set("janeiro fevereiro março abril maio junho julho agosto setembro outubro novembro dezembro".split(" "));
+const COMUNS=[
+ [/\bporque\s*\?/i,"No fim de uma pergunta, o correto é “por quê?”."],
+ [/\bhaja\s+visto\b/i,"O correto é “haja vista”."],
+ [/(^|\s)à\s+(muito|pouco|tempos?)\b/i,"Provavelmente é “há muito/pouco tempo” (verbo haver)."],
+ [/\bmenas\b/i,"“Menos” não tem feminino."],
+ [/\bporisso\b/i,"O correto é “por isso”."],
+ [/\bderrepente\b/i,"O correto é “de repente”."],
+ [/\b(pra|para)\s+mim\s+(fazer|ver|dizer|falar|ir|ler|abrir|fechar|saber|entender)\b/i,"Prefira “para eu + verbo” (ex.: “para eu fazer”)."],
+ [/\ba\s+gente\s+(vamos|fomos|estamos|queremos)\b/i,"Com “a gente”, o verbo fica no singular (ex.: “a gente vai”)."],
+];
+function tecnico(){
+  const fr=1/cfg.fps;let ant=null;
+  for(const c of cues){
+    const t=limpo(c),d=c.fim-c.ini,p=c.p;
+    if(!t.trim()){p.push(["VAZIA","Legenda sem texto."]);ant=c;continue}
+    if(d<=0)p.push(["TEMPO","O fim é anterior ou igual ao início."]);
+    else{
+      if(d<5/6-0.002)p.push(["DURAÇÃO",`Duração de ${d.toFixed(2)}s; o mínimo da Netflix é 5/6 de segundo.`]);
+      if(d>DUR_MAX+0.002)p.push(["DURAÇÃO",`Duração de ${d.toFixed(2)}s; o máximo é ${DUR_MAX}s.`]);
+      const cps=t.replace(/\n/g," ").length/d;
+      if(cps>cfg.cps+0.5)p.push(["LEITURA",`${Math.round(cps)} caracteres/s; o limite deste perfil é ${cfg.cps}.`]);
+    }
+    if(ant){
+      const g=c.ini-ant.fim;
+      if(g<-0.0005)p.push(["SOBREPOSIÇÃO",`Começa antes do fim da legenda ${ant.num}.`]);
+      else if(g<2*fr-0.004)p.push(["TEMPO",`Intervalo de ${Math.round(g/fr)} quadro(s) para a legenda ${ant.num}; o mínimo é 2 quadros.`]);
+      else if(g>2*fr+0.015&&g<0.49)p.push(["TEMPO",`Intervalo de ${g.toFixed(2)}s para a legenda ${ant.num}: deve ser de 2 quadros ou de pelo menos 0,5s (estenda o fim da anterior).`]);
+    }
+    if(c.linhas.length>MAX_LINHAS)p.push(["LINHAS",`${c.linhas.length} linhas (máximo ${MAX_LINHAS}).`]);
+    c.linhas.forEach(l=>{const s=l.replace(TAG,"");if(s.length>MAX_CHARS)p.push(["TAMANHO",`Linha com ${s.length} caracteres (máximo ${MAX_CHARS}): “${s}”`])});
+    ant=c;
+  }
+}
+function estilo(){
+  for(const c of cues){
+    const t=limpo(c),p=c.p;if(!t.trim())continue;
+    if(/[ \t]{2,}/.test(t))p.push(["ESPAÇO","Espaços duplicados."]);
+    if(/[ \t]+\n|\n[ \t]+/.test(t)||t!==t.trim())p.push(["ESPAÇO","Espaço sobrando no começo ou no fim de linha."]);
+    if(/[\p{L}\d][ \t]+[,.;:!?]/u.test(t))p.push(["PONTUAÇÃO","Espaço antes do sinal de pontuação."]);
+    if(/[,;:!?][^\s\d"'”’)\]\-,.;:!?…]/.test(t))p.push(["PONTUAÇÃO","Falta espaço depois do sinal de pontuação."]);
+    if(/\.[A-Za-zÀ-ÿ]/.test(t)&&!/\b\w+\.\w{2,4}\b/.test(t))p.push(["PONTUAÇÃO","Falta espaço depois do ponto."]);
+    if(/\.{2,}/.test(t))p.push(["PONTUAÇÃO","Use o caractere único de reticências “…” em vez de pontos (Netflix I.4)."]);
+    if(/[!?]{2,}/.test(t))p.push(["PONTUAÇÃO","Use só um sinal de pontuação final: evite “?!”, “!!!” e similares (Netflix I.18)."]);
+    if(/,,|;;|::/.test(t))p.push(["PONTUAÇÃO","Sinal de pontuação duplicado."]);
+    if(/,\s*[.!?]/.test(t))p.push(["PONTUAÇÃO","Vírgula antes de ponto final, exclamação ou interrogação."]);
+    if((t.match(/\(/g)||[]).length!==(t.match(/\)/g)||[]).length)p.push(["PONTUAÇÃO","Parênteses não fechados."]);
+    if((t.match(/\[/g)||[]).length!==(t.match(/\]/g)||[]).length)p.push(["PONTUAÇÃO","Colchetes não fechados."]);
+    if((t.match(/"/g)||[]).length%2)p.push(["PONTUAÇÃO","Aspas duplas não fechadas."]);
+    if((t.match(/“/g)||[]).length!==(t.match(/”/g)||[]).length)p.push(["PONTUAÇÃO","Aspas curvas não fechadas."]);
+    if(/[«»]/.test(t))p.push(["PONTUAÇÃO","Use aspas duplas (“ ”) em vez de « » (Netflix I.13)."]);
+    if(/“[ \t]|[ \t]”/.test(t))p.push(["PONTUAÇÃO","Aspas sem espaço entre elas e o texto (Netflix I.13)."]);
+    const r=/(^|[^\p{L}])(\p{L}{2,})\s+\2(?![\p{L}])/iu.exec(t);
+    if(r&&!REP_OK.has(r[2].toLowerCase()))p.push(["REPETIÇÃO",`Palavra repetida: “${r[2]} ${r[2]}”. Se o falante repetiu, a Netflix pede para traduzir uma vez só (I.15).`]);
+    if(/(?<!\.\.)[.!?]\s+\p{Ll}/u.test(t))p.push(["MAIÚSCULA","A frase deve começar com letra maiúscula."]);
+    for(const [re,msg] of COMUNS)if(re.test(t))p.push(["LINGUA",msg]);
+  }
+}
+function numPorExtenso(t){
+  const re=/(?<![\p{L}\d.,:/$#º°ª-])(10|[1-9])(?!\d|[.,:/]\d|[%º°ª]|h\b)/gu;let m;
+  while((m=re.exec(t))){
+    const ant=(t.slice(0,m.index).trim().split(/\s+/).pop()||"").toLowerCase().replace(/[^\p{L}º]/gu,"");
+    const dep=t.slice(m.index+m[0].length).trim().split(/\s+/).slice(0,2).map(x=>x.toLowerCase().replace(/[^\p{L}]/gu,""));
+    if(SEQ.has(ant)||UNID.has(dep[0])||(dep[0]==="de"&&MESES.has(dep[1])))continue;
+    return m[0];
+  }
+  return null;
+}
+function netflix(){
+  cues.forEach((c,i)=>{
+    const t=limpo(c),p=c.p,raw=c.linhas.join("\n");if(!t.trim())return;
+    const L=c.linhas.map(l=>l.replace(TAG,"").trim()),prox=cues[i+1];
+    const add=(k,m)=>p.push([k,m]);
+    // formatação
+    if(/<\s*(b|u|font)\b/i.test(raw))add("FORMATAÇÃO","Use só itálico (<i>); negrito, sublinhado e cores não são permitidos (Netflix I.7).");
+    if((raw.match(/<i>/gi)||[]).length!==(raw.match(/<\/i>/gi)||[]).length)add("FORMATAÇÃO","Tag de itálico aberta e não fechada.");
+    if(/<\s*\/?\s*br\s*\/?\s*>/i.test(raw))add("FORMATAÇÃO","Há tag <br>; use quebra de linha normal.");
+    if(/--/.test(t))add("PONTUAÇÃO","Troque “--” por “…” (Netflix I.4).");
+    if(/(^|\n)\s*>>/.test(t))add("FORMATAÇÃO","Remova o “>>” do início da fala.");
+    if(/''|â[™T]ª/.test(t))add("FORMATAÇÃO","Aspas escritas como '' ou símbolo de música quebrado (âTª): use “ ” e ♪.");
+    if(/[!?]\.(?![.\p{L}])/u.test(t))add("PONTUAÇÃO","Ponto final desnecessário depois de ! ou ?.");
+    if(L.length===1&&/[.!?…]\s+[-–—]\s*\p{L}/u.test(L[0]))add("DIÁLOGO","Dois falantes na mesma linha: separe em duas linhas, cada uma com “- ” (Netflix I.6).");
+    if(i>0){const pt=limpo(cues[i-1]).trim();
+      if(/(?<!\.\.)[.!?]["”)]?$/.test(pt)&&/^(?:[-–—]\s*)?\p{Ll}/u.test(t.trim()))add("MAIÚSCULA","A legenda anterior terminou a frase; esta deve começar com maiúscula.");}
+    // reticências / continuidade
+    if(/^(?:[-–—]\s*)?…[ \t]+\S/.test(t))add("PONTUAÇÃO","Sem espaço depois de “…” quando a legenda começa no meio da frase (Netflix I.4).");
+    if(/[-–—]\s*$/.test(t))add("PONTUAÇÃO","Não use hífen/travessão quando a frase continua na legenda seguinte (Netflix I.4).");
+    if(prox&&/…\s*$/.test(t)){
+      const tn=limpo(prox).trim(),gap=prox.ini-c.fim;
+      if(/^…/.test(tn))add("PONTUAÇÃO","Reticências no fim desta legenda e no início da seguinte: só se uma narrativa forçada interromper a fala (Netflix I.4).");
+      else if(/^\p{Ll}/u.test(tn)&&gap<2)add("PONTUAÇÃO","Frase continua na próxima legenda sem pausa de 2s: não use reticências (Netflix I.4).");
+    }
+    // diálogo com dois falantes
+    const trs=L.filter(l=>/^[-–—]/.test(l));
+    if(trs.length){
+      if(L.some(l=>/^[–—]/.test(l)))add("DIÁLOGO","Use hífen simples (-) para indicar a fala, não travessão (Netflix I.6).");
+      if(L.some(l=>/^[-–—][^\s]/.test(l)&&!/^--/.test(l)))add("DIÁLOGO","Falta espaço depois do hífen: use “- Fala” (Netflix I.6).");
+      if(L.length===2&&trs.length===1)add("DIÁLOGO","Em diálogo, as duas linhas começam com hífen e espaço (Netflix I.6).");
+      if(L.length===1)add("DIÁLOGO","Hífen em legenda de uma só linha: ele só é usado quando há dois falantes (Netflix I.6).");
+    }else if(L.length===2){
+      if(L.join(" ").length<=MAX_CHARS)add("QUEBRA","Cabe em uma linha só; a Netflix prefere uma linha quando não passa de 42 caracteres (I.11).");
+      const l1=L[0];
+      if(!/[.,;:!?…"”)\]]$/.test(l1)){
+        const w=(l1.split(/\s+/).pop()||"").toLowerCase().replace(/[^\p{L}]/gu,"");
+        if(FRACAS.has(w))add("QUEBRA",`A quebra separa “${w}” da palavra seguinte. Quebre depois de pontuação ou antes de conjunção/preposição (Netflix I.11).`);
+      }
+    }
+    if(L.some(l=>(l.match(/[.!?…]\s+\p{Lu}/gu)||[]).length>=2))add("QUEBRA","Mais de duas frases na mesma linha; a Netflix prefere no máximo duas (I.11).");
+    // números e unidades
+    if(/\d[ \t]+(km|cm|mm|kg|g|m|h|min|%)(?![\p{L}\d])/iu.test(t))add("NÚMEROS","Sem espaço entre número e unidade/símbolo: 5km, 3%, 2h (Netflix I.1 e I.12).");
+    if(/\d\s?(kms|cms|kgs|hs)\b|\d\s?(km|cm|kg|mm)\./i.test(t))add("ABREVIAÇÃO","Abreviações de medidas não levam ponto nem plural (Netflix I.1).");
+    if(/(?<![\p{L}\d])1 mil\b/u.test(t))add("NÚMEROS","Escreva “mil”, não “1 mil” (Netflix I.12).");
+    if(/(?<![A-Z])\$\s*\d/.test(t))add("NÚMEROS","Para dólar americano use “US$” (ex.: US$ 5) (Netflix I.12).");
+    if(/[€£¥]\s?\d|\d\s?[€£¥]/.test(t))add("NÚMEROS","Outras moedas devem ser escritas por extenso: euros, libras, ienes… (Netflix I.12).");
+    const mi=/(?:^|[.!?…]\s+|\n[-–—]\s*)(?:[-–—]\s*)?(\d+)(?![\d:/%hº°ª]|[.,]\d)/.exec(t);
+    if(mi&&mi[1].length<4)add("NÚMEROS","Número no início de frase deve ser escrito por extenso (Netflix I.12).");
+    const n=numPorExtenso(t);
+    if(n)add("NÚMEROS",`De 1 a 10, escreva por extenso (“${n}”), exceto idade, datas, medidas e sequências (Netflix I.12; pode haver exceções).`);
+    // abreviações
+    if(/\b[Ss][ée]c\.?\s+[IVXLC]{1,6}\b/.test(t))add("ABREVIAÇÃO","Século: use algarismos arábicos, “Séc. 20”, não “Séc. XX” (Netflix I.1).");
+    if(/(?<![\p{L}.])(?:\p{Lu}\.){2,}/u.test(t))add("ABREVIAÇÃO","Siglas sem pontos entre as letras: EUA, não E.U.A. (Netflix I.1).");
+    if(/(?<![\p{L}])(Sr|Sra|Srta|Dr|Dra|Prof|Profa|Pres|Gen|Ten|Sgt)\s+\p{Lu}/u.test(t))add("ABREVIAÇÃO","Abreviações de tratamento levam ponto: Sr., Dra., Prof. (Netflix I.1).");
+    // palavrões censurados e internetês
+    if(/(?<![\p{L}*])\*{2,}(?![\p{L}*])/u.test(t))add("PONTUAÇÃO","Palavra censurada: use as 1 ou 2 primeiras letras e asteriscos (ex.: P****) (Netflix I.19).");
+    if(/(?<![\p{L}])(vc|vcs|tb|tbm|pq|blz|msm|mto|hj)(?![\p{L}])/i.test(t))add("REGISTRO","Evite abreviações de internet (vc, tb, pq…); escreva a palavra completa.");
+    if(cfg.colq){
+      const col=[...new Set((t.match(/(?<![\p{L}])(né|pra|pras|pro|pros|tá|tô|cê|taí)(?![\p{L}])/giu)||[]).map(x=>x.toLowerCase()))];
+      if(col.length)add("REGISTRO",`Contrações coloquiais (${col.join(", ")}): só quando necessárias para o nível de informalidade do programa (Netflix I.19).`);
+    }
+    // caixa alta
+    const letras=t.replace(/[^\p{L}]/gu,"");
+    if(c.forcada){}else if(letras.length>3&&letras===letras.toUpperCase())add("MAIÚSCULA","Legenda toda em MAIÚSCULAS: reservada a narrativa forçada (texto na tela) (Netflix I.8).");
+    else if(L.length>1&&L.some(l=>{const x=l.replace(/[^\p{L}]/gu,"");return x.length>3&&x===x.toUpperCase()}))add("MAIÚSCULA","Narrativa forçada (MAIÚSCULAS) não deve ser misturada com diálogo na mesma legenda (Netflix I.8).");
+    // músicas
+    if(t.includes("♪")){
+      if(!/^(?:[-–—]\s*)?(?:\[[^\]]*\]\s*)?♪/.test(t.trim())||!/♪$/.test(t.trim()))add("MÚSICA","Letras de música: ♪ no início e no fim da legenda (Netflix II.7).");
+      if(/♪[^\s♪]|[^\s♪]♪/.test(t))add("MÚSICA","Deixe um espaço entre ♪ e o texto (Netflix II.7).");
+      if(!/<i>/i.test(raw))add("ITÁLICO","Letras de música vão em itálico (Netflix I.16).");
+      if(L.some(l=>/[,.]\s*♪?$/.test(l)))add("MÚSICA","Letras: sem vírgula nem ponto no fim da linha; só ? e ! (Netflix I.16).");
+    }
+    // SDH
+    if(/\[[^\]]*\]/.test(t)&&!cfg.sdh)add("SDH","Colchetes de efeitos sonoros e identificação de falantes são só do SDH; se for SDH, escolha esse perfil.");
+    if(/<i>\s*\[/i.test(raw))add("SDH","Identificações e efeitos sonoros nunca vão em itálico (Netflix II.5).");
+    if(/\[[^\]\p{Ll}]*\p{Lu}{2,}[^\]\p{Ll}]*\]/u.test(t))add("SDH","Dentro de colchetes use minúsculas, exceto nomes próprios (Netflix II.5).");
+    if(/\[falando em língua estrangeira\]/i.test(t))add("SDH","Pesquise o idioma: use “[falando em espanhol]”, não “língua estrangeira” (Netflix II.8).");
+  });
+}
+
+// ---------- LanguageTool ----------
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const SKIP=new Set(["WHITESPACE_RULE","COMMA_PARENTHESIS_WHITESPACE","UPPERCASE_SENTENCE_START","DOUBLE_PUNCTUATION","EN_QUOTES","PT_QUOTES"]);
+async function gramatica(ignNomes,soIdx){
+  const itens=[];cues.forEach((c,i)=>{if(soIdx&&!soIdx.includes(i))return;c.lt=[];const t=limpo(c).replace(/\n/g," ").trim();if(t)itens.push({i,t})});
+  const chunks=[];let cur=[],tam=0;
+  for(const it of itens){if(tam+it.t.length>12000&&cur.length){chunks.push(cur);cur=[];tam=0}cur.push(it);tam+=it.t.length+2}
+  if(cur.length)chunks.push(cur);
+  for(let k=0;k<chunks.length;k++){
+    $("status").textContent=`Verificando ortografia e gramática... parte ${k+1} de ${chunks.length}`;
+    let texto="";const starts=[];
+    for(const it of chunks[k]){starts.push(texto.length);texto+=it.t+"\n\n"}
+    let js;
+    try{
+      const resp=await fetch("https://api.languagetool.org/v2/check",{method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:new URLSearchParams({text:texto,language:"pt-BR"})});
+      if(!resp.ok)throw new Error("HTTP "+resp.status);
+      js=await resp.json();
+    }catch(e){
+      return "Não consegui usar o corretor online ("+e.message+"). Confira sua internet ou tente de novo em 1 minuto. As outras checagens foram feitas normalmente.";
+    }
+    for(const m of js.matches){
+      if(SKIP.has(m.rule.id))continue;
+      let lo=0,hi=starts.length-1;
+      while(lo<hi){const mid=(lo+hi+1)>>1;if(starts[mid]<=m.offset)lo=mid;else hi=mid-1}
+      const cue=cues[chunks[k][lo].i];
+      const trecho=texto.substr(m.offset,m.length);
+      const ortog=m.rule.issueType==="misspelling";
+      if(ortog&&ignNomes&&/^\p{Lu}/u.test(trecho))continue;
+      const cat=ortog?"ORTOGRAFIA":(m.rule.issueType==="style"?"ESTILO":"GRAMÁTICA");
+      if(!trecho)continue;
+      const sugs=m.replacements.slice(0,3).map(r=>r.value),sug=sugs.join(", ");
+      const chave=ortog?`LT|${m.rule.id}|${trecho.toLowerCase()}`:`LT|${m.rule.id}`;
+      const occ=texto.slice(starts[lo],m.offset).split(trecho).length-1;
+      cue.lt.push([cat,`${m.message} [“${trecho}”]`+(sug?` → sugestões: ${sug}`:""),chave,
+        ortog?`Ortografia: palavra “${trecho}”`:m.message,ortog?"Ignorar esta palavra":"Ignorar este tipo",trecho,{t:"lt",trecho,occ,sugs}]);
+    }
+    if(k<chunks.length-1)await sleep(3300);
+  }
+  return "";
+}
+
+// ---------- correções automáticas ----------
+const dashRe=/^(?:<[^>]+>)*[-–—]/;
+const ABREV=new Set("sr sra srta dr dra prof profa etc ex vs av pág séc cap ed pres gen ten sgt art".split(" "));
+function capFirst(l){return l.replace(/^((?:<[^>]+>)*(?:[-–—]\s*)?(?:<[^>]+>)*)(\p{Ll})/u,(m,pre,ch)=>pre+ch.toUpperCase())}
+function quebrar(t){
+  const pl=x=>x.replace(TAG,"");
+  if(pl(t).length<=MAX_CHARS)return t;
+  let best=null,bs=1e9,m;const re=/ /g;
+  while((m=re.exec(t))){
+    const antes=t.slice(0,m.index);if(antes.lastIndexOf("<")>antes.lastIndexOf(">"))continue;
+    const a=antes,b=t.slice(m.index+1),la=pl(a).length,lb=pl(b).length;
+    if(!la||!lb||la>MAX_CHARS||lb>MAX_CHARS)continue;
+    const w=pl(a).trim().split(/\s+/).pop().toLowerCase().replace(/[^\p{L}]/gu,"");
+    let sc=Math.abs(la-lb)*0.6+(la>lb?(la-lb)*0.4:0);
+    if(FRACAS.has(w)&&!/[.,;:!?…]$/.test(pl(a)))sc+=40;
+    if(/[.,;:!?…]["”]?$/.test(pl(a)))sc-=12;
+    if(sc<bs){bs=sc;best={a,b}}
+  }
+  if(!best)return t;
+  let {a,b}=best;
+  if((a.match(/<i>/gi)||[]).length>(a.match(/<\/i>/gi)||[]).length){a+="</i>";b="<i>"+b}
+  return a+"\n"+b;
+}
+function fixTexto(s,on,prevPlain,primeira){
+  const PRE="((?:<[^>]+>)*)";
+  if(on("vazias"))s=s.replace(/<\s*\/?\s*br\s*\/?\s*>/gi,"\n").split("\n").filter(l=>l.trim()).join("\n");
+  if(on("aspas2"))s=s.replace(/''/g,'"');
+  if(on("musica"))s=s.replace(/â[™T]ª/g,"♪").replace(/♫/g,"♪");
+  if(on("maisMais"))s=s.replace(/^(\s*(?:<[^>]+>)*)>>\s*/gm,"$1");
+  if(on("duplosTracos"))s=s.replace(/--+/g,"…");
+  if(on("espacos"))s=s.replace(/[ \t]{2,}/g," ").replace(/[ \t]+\n/g,"\n").replace(/\n[ \t]+/g,"\n")
+     .replace(/([\p{L}\d])[ \t]+([,;:!?])/gu,"$1$2").replace(/([\p{L}\d])[ \t]+\.(?!\.)/gu,"$1.").trim();
+  if(on("faltaEspaco"))s=s.replace(/([,;!?])(?=[A-Za-zÀ-ÿ])/g,"$1 ").replace(/(\p{Ll}{2})\.(?=\p{Lu})/gu,"$1. ");
+  if(on("periodos"))s=s.replace(/([!?])\.(?![.\p{L}])/gu,"$1");
+  if(on("virgulas"))s=s.replace(/,(?:\s*,)+/g,",");
+  if(on("reticencias"))s=s.replace(/\.{2,}/g,"…").replace(/…{2,}/g,"…").replace(/^((?:[-–—]\s*)?)…[ \t]+/gm,"$1…");
+  if(on("unidades"))s=s.replace(/(\d)[ \t]+(km|cm|mm|kg|m|h|%)(?![\p{L}\d])/gu,"$1$2");
+  if(on("colchete"))s=s.split("\n").map(l=>{
+    const pre=/^((?:<[^>]+>)*(?:[-–—]\s*)?(?:<[^>]+>)*)/.exec(l)[1];let r=l.slice(pre.length);
+    if(/\]/.test(r)&&!/\[/.test(r))r="["+r;
+    if(/\)/.test(r)&&!/\(/.test(r))r="("+r;
+    return pre+r}).join("\n");
+  if(on("dialogoUmaLinha")&&!s.includes("\n")){
+    const n=s.replace(/([.!?…](?:<\/i>)?)\s+[-–—]\s*(?=[\p{L}<"“\[])/gu,"$1\n- ");
+    if(n!==s)s=dashRe.test(n)?n:"- "+n;
+  }
+  if(on("hifenNorm"))s=s.replace(new RegExp("^"+PRE+"[–—]\\s*(?=\\S)","gm"),"$1- ").replace(new RegExp("^"+PRE+"-(?=[^\\s-])","gm"),"$1- ");
+  let L=s.split("\n");
+  const dash=L.map(l=>dashRe.test(l)),nd=dash.filter(Boolean).length;
+  const tiraTraco=l=>l.replace(/^((?:<[^>]+>)*)[-–—]\s*/,"$1");
+  if(L.length===1&&dash[0]&&on("tracoUnico"))L[0]=tiraTraco(L[0]);
+  else if(L.length===2&&nd===1){
+    if(dash[0]&&/^(?:<[^>]+>)*\p{Ll}/u.test(L[1])){if(on("tracoUnico"))L[0]=tiraTraco(L[0])}
+    else if(on("tracoAmbas")){const k=dash[0]?1:0;L[k]=L[k].replace(/^((?:<[^>]+>)*)/,"$1- ")}
+  }
+  s=L.join("\n");
+  if(on("italico")){
+    let d=0;
+    s=s.replace(/<(\/?)i>/gi,(m,sl)=>{if(sl){if(!d)return"";d--;return m}if(d){d--;return"</i>"}d++;return m});
+    s=(s+"</i>".repeat(d)).replace(/<i>\s*<\/i>/gi,"");
+  }
+  if(on("maiusDentro"))s=s.replace(/(\p{L}+)([.!?])(\s+)(<i>)?(\p{Ll})/gu,(m,w,p,sp,tg,ch)=>ABREV.has(w.toLowerCase())?m:w+p+sp+(tg||"")+ch.toUpperCase());
+  if(on("maiusInicio")){
+    L=s.split("\n");
+    const fim=primeira||/(?<!\.\.)[.!?]["”)]?$/.test(prevPlain);
+    L=L.map((l,k)=>(k===0?fim:dashRe.test(l))?capFirst(l):l);
+    s=L.join("\n");
+  }
+  if(on("aspasFalta")&&(s.replace(TAG,"").match(/"/g)||[]).length%2){
+    if(/^(?:<[^>]+>)*(?:[-–—]\s*)?"/.test(s))s=s.replace(/((?:<\/i>)*)$/,'"$1');
+    else if(/"(?:<\/i>)*$/.test(s))s=s.replace(/^((?:<[^>]+>)*(?:[-–—]\s*)?)/,'$1"');
+  }
+  L=s.split("\n");
+  if(!L.some(l=>dashRe.test(l))){
+    const pl=x=>x.replace(TAG,"");
+    if(on("pontoLinha"))for(let k=0;k<L.length-1;k++){
+      if(/[\p{L}\d](<\/i>)?$/u.test(L[k])&&/^(?:<[^>]+>)*\p{Lu}/u.test(L[k+1]))L[k]=L[k].replace(/((?:<\/i>)?)$/,".$1");
+    }
+    const junto=L.join(" "),len=pl(junto).length;
+    let r=null;
+    if(L.length>2&&on("tresLinhas")&&len<=2*MAX_CHARS)r=quebrar(junto);
+    else if(on("dividir")&&L.some(l=>pl(l).length>MAX_CHARS)&&len<=2*MAX_CHARS)r=quebrar(junto);
+    else if(L.length===2&&on("juntar")&&len<=MAX_CHARS&&!/[.!?…](<\/i>)?$/.test(L[0]))r=junto;
+    if(r!==null&&(r.includes("\n")||pl(r).length<=MAX_CHARS))return r;
+  }
+  return L.join("\n");
+}
+// ---------- você decide: sugestões, edição e desfazer ----------
+const MAPA=[
+ [/Espaços duplicados|Espaço sobrando|Espaço antes do sinal/,["espacos"]],
+ [/Falta espaço depois do (sinal|ponto)/,["faltaEspaco"]],
+ [/caractere único de reticências|Sem espaço depois de “…”/,["reticencias"]],
+ [/Ponto final desnecessário/,["periodos"]],
+ [/Sinal de pontuação duplicado/,["virgulas"]],
+ [/Troque “--”/,["duplosTracos"]],
+ [/Remova o “>>”/,["maisMais"]],
+ [/Aspas escritas como/,["aspas2","musica"]],
+ [/Há tag <br>/,["vazias"]],
+ [/Tag de itálico/,["italico"]],
+ [/Colchetes não fechados|Parênteses não fechados/,["colchete"]],
+ [/Aspas duplas não fechadas/,["aspasFalta"]],
+ [/Sem espaço entre número e unidade/,["unidades"]],
+ [/Use hífen simples|Falta espaço depois do hífen/,["hifenNorm"]],
+ [/duas linhas começam com hífen/,["tracoAmbas"]],
+ [/Hífen em legenda de uma só linha/,["tracoUnico"]],
+ [/Dois falantes na mesma linha/,["dialogoUmaLinha","hifenNorm"]],
+ [/A legenda anterior terminou a frase/,["maiusInicio"]],
+ [/A frase deve começar com letra maiúscula/,["maiusDentro"]],
+ [/Cabe em uma linha só/,["juntar"]],
+ [/Linha com \d+ caracteres/,["dividir"]],
+ [/^\d+ linhas \(máximo/,["tresLinhas"]],
+ [/Começa antes do fim da legenda/,["tempoSobrep"]],
+ [/^Intervalo de/,["tempoInterv"]],
+];
+function recalcLocal(){
+  lerCfg();cues.forEach(c=>c.p=[]);tecnico();estilo();netflix();
+  cues.forEach(c=>c.p.forEach(x=>{const m=MAPA.find(([re])=>re.test(x[1]));if(m)x[6]={t:"auto",ids:m[1]}}));
+}
+const prevPlain=i=>i>0?cues[i-1].linhas.join("\n").replace(TAG,"").trim():"";
+function alvoTempo(i,on){
+  if(i<1)return null;
+  const fr=1/cfg.fps,a=cues[i-1],b=cues[i],g=b.ini-a.fim,gm=2*fr;let alvo=null;
+  if(g<gm-0.004&&(g<0?on("tempoSobrep"):on("tempoInterv")))alvo=b.ini-gm;
+  else if(on("tempoInterv")&&g>gm+0.015&&g<0.49)alvo=b.ini-gm;
+  return(alvo!==null&&alvo>a.ini+0.2&&alvo-a.ini<=DUR_MAX+0.002)?alvo:null;
+}
+function prever(i,ids){
+  const set=new Set(ids),on=id=>set.has(id),atual=cues[i].linhas.join("\n");
+  const novo=fixTexto(atual,on,prevPlain(i),i===0);
+  return{novo,muda:novo!==atual,tempo:alvoTempo(i,on)};
+}
+function aplicarLocal(i,ids){
+  const set=new Set(ids),on=id=>set.has(id),a=alvoTempo(i,on);
+  if(a!==null)cues[i-1].fim=a;
+  cues[i].linhas=fixTexto(cues[i].linhas.join("\n"),on,prevPlain(i),i===0).split("\n");
+}
+let hist=[],editando=null,acoes=[];
+const snap=()=>{hist.push(cues.map(c=>({ini:c.ini,fim:c.fim,linhas:[...c.linhas],lt:[...c.lt]})));if(hist.length>60)hist.shift()};
+function desfazer(){
+  const s=hist.pop();if(!s)return;
+  s.forEach((o,i)=>Object.assign(cues[i],{ini:o.ini,fim:o.fim,linhas:o.linhas,lt:o.lt}));
+  editando=null;recalcLocal();mostrar();
+}
+function aplicarLT(i,issue,sug){
+  const f=issue[6],c=cues[i];let raw=c.linhas.join("\n"),idx=-1,from=0;
+  for(let k=0;k<=f.occ;k++){idx=raw.indexOf(f.trecho,from);if(idx<0)break;from=idx+1}
+  if(idx<0){alert("Não consegui localizar o trecho com segurança. Use “Editar texto” para corrigir à mão.");return}
+  snap();
+  c.linhas=(raw.slice(0,idx)+sug+raw.slice(idx+f.trecho.length)).split("\n");
+  c.lt=c.lt.filter(y=>y!==issue);
+  c.lt.forEach(y=>{const g=y[6];if(g&&g.trecho===f.trecho&&g.occ>f.occ)g.occ--});
+  recalcLocal();mostrar();
+}
+function salvarEdicao(i,txt){
+  snap();
+  cues[i].linhas=txt.replace(/\r/g,"").replace(/\n+$/,"").split("\n");cues[i].lt=[];editando=null;
+  recalcLocal();mostrar();
+  if($("optLT").checked)gramatica($("optNames").checked,[i]).then(av=>{$("status").textContent=av||"Pronto!";mostrar()});
+}
+function aplicarTodas(ids){
+  if(!confirm("Aplicar esta correção em todas as legendas do arquivo?"))return;
+  snap();for(let i=0;i<cues.length;i++)aplicarLocal(i,ids);
+  recalcLocal();mostrar();
+}
+const srtAtual=()=>cues.map((c,i)=>`${i+1}\n${fmt(c.ini)} --> ${fmt(c.fim)}\n${c.linhas.join("\n")}\n`).join("\n");
+
+// ---------- exibição ----------
+const esc=s=>s.replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+let ign={};   // valem só para a legenda carregada e voltam ao carregar outra
+function meta(x){
+  if(x[2])return{key:x[2],label:x[3],btn:x[4]};
+  const base=x[1].replace(/“[^”]*”/g,"“…”").replace(/\d+([.,]\d+)?/g,"#");
+  return{key:"R|"+x[0]+"|"+base,label:`${x[0]}: ${base}`,btn:"Ignorar este tipo"};
+}
+const visiveis=c=>c.p.concat(c.lt).filter(x=>!ign[meta(x).key]);
+const CATS=[["ORTOGRAFIA","Ortografia"],["LINGUA","Língua portuguesa"],["GRAMÁTICA","Gramática"],["MAIÚSCULA","Maiúsculas"],["REPETIÇÃO","Repetição"],
+ ["ESTILO","Estilo"],["PONTUAÇÃO","Pontuação"],["ESPAÇO","Espaços"],["NÚMEROS","Números"],["ABREVIAÇÃO","Abreviações"],["REGISTRO","Registro"],
+ ["FORMATAÇÃO","Formatação"],["ITÁLICO","Itálico"],["DIÁLOGO","Diálogo"],["QUEBRA","Quebra de linha"],["MÚSICA","Música"],["SDH","SDH"],
+ ["TEMPO","Tempo"],["DURAÇÃO","Duração"],["LEITURA","Velocidade de leitura"],["SOBREPOSIÇÃO","Sobreposição"],["LINHAS","Nº de linhas"],
+ ["TAMANHO","Tamanho da linha"],["VAZIA","Legenda vazia"],["FORMATO","Formato do arquivo"]];
+const INFO={};CATS.forEach(([c,n],i)=>INFO[c]={n,o:i,h:Math.round(i*137.508)%360});
+const info=c=>INFO[c]||{n:c,o:99,h:200};
+const filtro=new Set();
+function destacar(raw,itens){
+  const R=[];
+  for(const x of itens){const tr=x[5];if(!tr)continue;const i=raw.indexOf(tr);if(i>=0)R.push([i,i+tr.length,info(x[0]).h])}
+  R.sort((a,b)=>a[0]-b[0]);let pos=0,o="";
+  for(const [a,b,hu] of R){if(a<pos)continue;o+=esc(raw.slice(pos,a))+`<mark class="cc" style="--h:${hu}">${esc(raw.slice(a,b))}</mark>`;pos=b}
+  return o+esc(raw.slice(pos));
+}
+function sugHtml(i,x,reg){
+  const f=x[6];if(!f)return"";
+  if(f.t==="lt")return f.sugs.length?`<div class="sug">Trocar por:${f.sugs.map(s=>`<button class="mini ok" data-a="${reg({k:"lt",i,x,s})}">${esc(s)}</button>`).join("")}</div>`:"";
+  const p=prever(i,f.ids);
+  if(!p.muda&&p.tempo===null)return"";
+  return `<div class="sug">Sugestão:`+(p.muda?`<div class="txt novo">${esc(p.novo)}</div>`:"")+
+    (p.tempo!==null?`<div class="sugt">Novo fim da legenda #${cues[i-1].num}: ${fmtT(p.tempo)}</div>`:"")+
+    `<button class="mini ok" data-a="${reg({k:"auto",i,ids:f.ids})}">✔ Aplicar</button><button class="mini" data-a="${reg({k:"todas",ids:f.ids})}">Aplicar em todas as legendas</button></div>`;
+}
+function mostrar(){
+  acoes=[];const reg=o=>acoes.push(o)-1;
+  const todos=cues.map((c,i)=>({c,i,ps:visiveis(c)}));
+  const tot=todos.reduce((a,o)=>a+o.ps.length,0),com=todos.filter(o=>o.ps.length).length;
+  const cont={};todos.forEach(o=>o.ps.forEach(x=>{cont[x[0]]=(cont[x[0]]||0)+1}));
+  [...filtro].forEach(k=>{if(!cont[k])filtro.delete(k)});
+  const cats=Object.keys(cont).sort((a,b)=>info(a).o-info(b).o);
+  $("sum").textContent=`${cues.length} legendas analisadas · ${com} com apontamentos · ${tot} apontamentos`;
+  $("bar").innerHTML=cats.map(k=>`<span class="cc" style="--h:${info(k).h};flex:${cont[k]}"></span>`).join("");
+  $("chips").innerHTML=`<button class="chip${filtro.size?"":" on"}" data-g="*">Todos <b>${tot}</b></button>`+
+    cats.map(k=>`<button class="chip cc${filtro.has(k)?" on":""}" style="--h:${info(k).h}" data-g="${esc(k)}">${esc(info(k).n)} <b>${cont[k]}</b></button>`).join("");
+  let html="",shown=0,resta=0;
+  for(const {c,i,ps} of todos){
+    const sel=ps.filter(x=>!filtro.size||filtro.has(x[0]));
+    if(!sel.length&&editando!==i)continue;
+    if(shown>=limite&&editando!==i){resta++;continue}
+    shown++;
+    const ks=[...new Set(sel.map(x=>x[0]))].sort((a,b)=>info(a).o-info(b).o);
+    const ed=editando===i;
+    html+=`<div class="cue cc" style="--h:${info(ks[0]||"").h}"><h3><span>#${c.num} · ${fmtT(c.ini)} → ${fmtT(c.fim)}${c.pos==='top'?'<span class="badge">⬆ topo</span>':''}${c.forcada?'<span class="badge">narrativa forçada</span>':''}${ks.map(k=>`<span class="dot cc" style="--h:${info(k).h}"></span>`).join("")}</span>`+
+      (ed?"":`<button class="mini" data-a="${reg({k:"edit",i})}">✏️ Editar texto</button>`)+`</h3>`+
+      (ed?`<textarea id="ed${i}" class="ed" rows="3">${esc(c.linhas.join("\n"))}</textarea><div class="acts"><button class="mini ok" data-a="${reg({k:"salvar",i})}">Salvar</button><button class="mini" data-a="${reg({k:"cancelar",i})}">Cancelar</button></div>`
+          :`<div class="txt">${destacar(c.linhas.join("\n"),sel)}</div>`+(c.nota?`<div class="nota">📝 ${esc(c.nota)}</div>`:""))+
+      sel.map(x=>{const m=meta(x),inf=info(x[0]);
+        return `<div class="iss"><span class="tag cc" style="--h:${inf.h}">${esc(inf.n)}</span>${esc(x[1])}<button class="mini" data-a="${reg({k:"ign",key:m.key,label:m.label})}">${m.btn}</button>${sugHtml(i,x,reg)}</div>`}).join("")+`</div>`;
+  }
+  if(resta)html+=`<div class="box"><button class="mini ok" data-a="${reg({k:"mais"})}">Mostrar mais (${resta} legendas restantes)</button></div>`;
+  $("list").innerHTML=html||`<div class="box">Nada encontrado aqui. 🎉</div>`;
+  const ks=Object.keys(ign);
+  $("igd").hidden=!ks.length;
+  $("igs").textContent=`Tipos de erro ignorados nesta legenda (${ks.length})`;
+  $("igl").innerHTML=ks.map((k,i)=>`<div class="ig"><button class="mini" data-r="${i}">Restaurar</button><span>${esc(ign[k])}</span></div>`).join("")+
+    (ks.length>1?`<div class="ig"><button class="mini" data-r="all">Restaurar todos</button></div>`:"");
+  $("undo").disabled=!hist.length;
+}
+$("chips").onclick=e=>{
+  const b=e.target.closest("button[data-g]");if(!b)return;
+  const g=b.dataset.g;limite=150;if(g==="*")filtro.clear();else if(filtro.has(g))filtro.delete(g);else filtro.add(g);
+  mostrar();
+};
+$("list").onclick=e=>{
+  const b=e.target.closest("button[data-a]");if(!b)return;
+  const a=acoes[+b.dataset.a];if(!a)return;
+  if(a.k==="ign"){ign[a.key]=a.label;mostrar()}
+  else if(a.k==="auto"){snap();aplicarLocal(a.i,a.ids);recalcLocal();mostrar()}
+  else if(a.k==="todas")aplicarTodas(a.ids);
+  else if(a.k==="lt")aplicarLT(a.i,a.x,a.s);
+  else if(a.k==="edit"){editando=a.i;mostrar()}
+  else if(a.k==="salvar")salvarEdicao(a.i,document.getElementById("ed"+a.i).value);
+  else if(a.k==="cancelar"){editando=null;mostrar()}
+  else if(a.k==="mais"){limite+=150;mostrar()}
+};
+$("igl").onclick=e=>{
+  const b=e.target.closest("button[data-r]");if(!b)return;
+  if(b.dataset.r==="all")ign={};else delete ign[Object.keys(ign)[+b.dataset.r]];
+  mostrar();
+};
+function relatorio(){
+  const o=[];erros.forEach(e=>o.push("[FORMATO] "+e));let tot=0;
+  for(const c of cues){const ps=visiveis(c);if(!ps.length)continue;tot+=ps.length;
+    o.push(`\n#${c.num}  ${fmtT(c.ini)} → ${fmtT(c.fim)}`);c.linhas.forEach(l=>o.push("   | "+l));
+    ps.forEach(x=>o.push(`   [${info(x[0]).n}] ${x[1]}`));}
+  const ni=Object.keys(ign).length;
+  o.push(`\n${"=".repeat(50)}\n${cues.length} legendas analisadas, ${tot} apontamentos.`+(ni?` (${ni} tipo(s) de erro ignorado(s) não aparecem aqui.)`:""));
+  return o.join("\n");
+}
+function baixar(nome,conteudo){
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([conteudo],{type:"text/plain;charset=utf-8"}));
+  a.download=nome;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+$("go").onclick=async()=>{
+  $("go").disabled=true;$("status").textContent="Analisando...";
+  abrir();atualizaBotoes();limite=150;
+  if(!cues.length){$("status").textContent=erros[0]||"Não encontrei nenhuma legenda válida nesse arquivo.";$("go").disabled=false;return}
+  hist=[];editando=null;filtro.clear();recalcLocal();
+  let aviso="";
+  if($("optLT").checked)aviso=await gramatica($("optNames").checked);
+  $("out").hidden=false;$("status").textContent=aviso||"Pronto!";
+  mostrar();$("go").disabled=false;
+};
+$("dlRep").onclick=()=>baixar(nomeArq+"_relatorio.txt",relatorio());
+$("dlFix").onclick=()=>{const o=exportarOriginal();baixar(nomeArq+"_revisada."+o.ext,o.conteudo)};
+$("dlSrt").onclick=()=>baixar(nomeArq+"_revisada.srt",srtAtual());
+$("undo").onclick=desfazer;
+
+// ---------- aba: comparador e sugestões ----------
+const CMP={T:null,P:null,ach:[],dis:new Set(),filtro:new Set(),lim:150,rel:null,acoes:[],nid:0,parar:false,uso:{in:0,out:0,n:0,sem:0},N:0,tot:0,feitas:0};
+const CATC={obj:{n:"Erros objetivos",h:0},sub:{n:"Erros subjetivos",h:38},sug:{n:"Sugestões de melhoria",h:150}};
+const semTag=s=>s.replace(TAG,"");
+const plainC=c=>semTag(c.linhas.join(" ")).replace(/\s+/g," ").trim();
+const cap=s=>s?s[0].toUpperCase()+s.slice(1):s;
+const fmtA=(a,s)=>{const m=modoT,n=nomT;modoT=a.modo||"ms";nomT=a.nom||24;const r=fmtT(s);modoT=m;nomT=n;return r};
+async function lerTexto(f){const b=await f.arrayBuffer();try{return new TextDecoder("utf-8",{fatal:true}).decode(b)}catch(e){return new TextDecoder("windows-1252").decode(b)}}
+async function carregaCmp(f,slot){
+  const r=lerArquivo(await lerTexto(f));
+  if(!r.cues.length){$("cmpStatus").textContent=r.erros[0]||"Nenhuma legenda válida em "+f.name;return}
+  CMP[slot]={nome:f.name,cues:r.cues,arq:r.arq};
+  $(slot==="T"?"nT":"nP").textContent=`${f.name} · ${r.cues.length} legendas`;
+  $(slot==="T"?"dzT":"dzP").classList.add("ok");$("cmpGo").disabled=!CMP.P;$("cmpStatus").textContent="";
+}
+[["dzT","fT","T"],["dzP","fP","P"]].forEach(([d,i,s])=>{
+  const dz=$(d),inp=$(i);dz.onclick=()=>inp.click();
+  dz.ondragover=e=>{e.preventDefault();dz.classList.add("over")};dz.ondragleave=()=>dz.classList.remove("over");
+  dz.ondrop=e=>{e.preventDefault();dz.classList.remove("over");if(e.dataTransfer.files[0])carregaCmp(e.dataTransfer.files[0],s)};
+  inp.onchange=()=>{if(inp.files[0])carregaCmp(inp.files[0],s)};
+});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));
+  ["tabRev","tabCmp"].forEach(t=>$(t).hidden=t!==b.dataset.t);
+});
+
+// alinhamento aproximado por tempo (aceita juntar/dividir e pequenos deslocamentos)
+function alinhar(T,P){
+  const cand=new Set([0]);
+  for(let i=0;i<Math.min(5,P.length);i++)for(let j=0;j<Math.min(15,T.length);j++)cand.add(Math.round((T[j].ini-P[i].ini)*100)/100);
+  const sc=d=>{let n=0;for(let i=0;i<Math.min(60,P.length);i++){const a=P[i].ini+d,b=P[i].fim+d;if(T.some(t=>Math.min(t.fim,b)-Math.max(t.ini,a)>0.1))n++}return n};
+  let off=0,bs=-1;for(const d of cand){const s=sc(d);if(s>bs||(s===bs&&Math.abs(d)<Math.abs(off))){bs=s;off=d}}
+  const rel=P.map(()=>[]),relT=T.map(()=>[]);
+  P.forEach((p,i)=>{const a=p.ini+off,b=p.fim+off;
+    T.forEach((t,j)=>{const ov=Math.min(t.fim,b)-Math.max(t.ini,a);if(ov>0.08||ov>0.3*Math.min(t.fim-t.ini,b-a)){rel[i].push(j);relT[j].push(i)}})});
+  return{rel,relT,off};
+}
+const PROV={
+ gemini:{modelo:"gemini-flash-latest",lote:25,nota:"Chave grátis em aistudio.google.com/apikey, sem cartão. Prefira um modelo Flash. No plano gratuito, o Google pode usar os textos enviados para melhorar os produtos dele."},
+ groq:{base:"https://api.groq.com/openai/v1",modelo:"llama-3.3-70b-versatile",lote:10,nota:"Chave grátis em console.groq.com. O limite de tokens por minuto é baixo, então a análise vai mais devagar (a página espera sozinha quando o limite é atingido)."},
+ openrouter:{base:"https://openrouter.ai/api/v1",modelo:"",lote:12,nota:"Chave em openrouter.ai/keys. Modelos com final “:free” não têm custo, mas têm limite diário baixo. Clique em Buscar modelos e escolha um."},
+ anthropic:{modelo:"claude-sonnet-5-5",lote:30,nota:"Chave em console.anthropic.com. Cobrança por uso."},
+ openai:{base:"https://api.openai.com/v1",modelo:"gpt-5.5",lote:30,nota:"Chave em platform.openai.com/api-keys. A API é cobrada por uso, à parte da assinatura do ChatGPT. Se o modelo der erro, use Buscar modelos."},
+ custom:{base:"http://localhost:11434/v1",modelo:"",lote:10,nota:"Serve para Ollama ou LM Studio (grátis, no seu computador, os textos não saem dele), Mistral, DeepSeek, Together etc. No Ollama, inicie com OLLAMA_ORIGINS=* para o navegador poder conectar."},
+};
+const PRECOS=[[/gpt-5\.5-pro/,30,180],[/gpt-5\.5/,5,30],[/gpt-5\.4-nano/,0.2,1.25],[/gpt-5\.4-mini/,0.75,4.5],[/gpt-5\.4/,2.5,15],
+ [/claude-sonnet-5/,2,10],[/claude-haiku-5/,0.1,0.5]];
+function precoAuto(){
+  const m=$("aiModel").value.trim().toLowerCase(),pv=$("aiProv").value;let p=null;
+  if(m.endsWith(":free")||(pv==="custom"&&/localhost|127\.0\.0\.1/.test($("aiBase").value)))p=[0,0,"Modelo local/gratuito: sem custo."];
+  else{const r=PRECOS.find(x=>x[0].test(m));if(r)p=[r[1],r[2],"Preço de referência (pesquisado em out/2026). Confira no site do serviço, pois muda com frequência."]}
+  if(p){$("aiPin").value=p[0];$("aiPout").value=p[1];$("aiPnote").textContent=p[2]}
+  else{$("aiPin").value="";$("aiPout").value="";$("aiPnote").textContent=pv==="gemini"||pv==="groq"?"Se estiver usando o plano gratuito, nada é cobrado (preencha 0 e 0). Para modelo pago, informe os preços para ver o custo.":"Preço deste modelo não cadastrado: preencha para ver o custo em dinheiro. Os tokens aparecem de qualquer jeito."}
+}
+$("aiModel").onchange=precoAuto;
+const nf=n=>Math.round(n).toLocaleString("pt-BR");
+const money=(v,s)=>s+" "+v.toFixed(v>=1?2:v>=0.01?3:4).replace(".",",");
+function usoTxt(){
+  const u=CMP.uso,pi=parseFloat($("aiPin").value),po=parseFloat($("aiPout").value),fx=parseFloat($("aiFx").value);
+  let s=`Uso: ${nf(u.in)} tokens de entrada + ${nf(u.out)} de saída (${nf(u.in+u.out)} no total, ${u.n} pedido${u.n===1?"":"s"})`;
+  if(u.sem)s+=` · ${u.sem} pedido(s) sem informação de uso`;
+  if(isNaN(pi)||isNaN(po))return s+" · informe os preços para ver o custo em dinheiro.";
+  const c=(u.in*pi+u.out*po)/1e6;
+  if(c===0)return s+" · custo: US$ 0,00 (gratuito).";
+  const br=v=>money(v,"US$")+(fx>0?` (≈ ${money(v*fx,"R$")})`:"");
+  s+=` · custo ≈ ${br(c)}`;
+  if(CMP.feitas>0){s+=` · ≈ ${br(c/CMP.feitas*100)} a cada 100 legendas`;
+    if(CMP.feitas<CMP.tot)s+=` · para as ${CMP.tot} legendas, estimativa de ≈ ${br(c/CMP.feitas*CMP.tot)}`}
+  return s;
+}
+const baseUrl=pv=>(pv==="custom"?$("aiBase").value.trim():PROV[pv].base).replace(/\/+$/,"");
+function aiProvMudou(){
+  const pv=$("aiProv").value,p=PROV[pv];$("aiBase").value=p.base||"";$("aiBaseRow").hidden=pv!=="custom";
+  $("aiModel").value=p.modelo;$("aiNote").textContent=p.nota;$("aiModels").innerHTML="";precoAuto();
+}
+$("aiProv").onchange=aiProvMudou;
+function aiSalvar(){try{if($("aiMem").checked)localStorage.setItem("revtitles_ia",JSON.stringify({pv:$("aiProv").value,k:$("aiKey").value,m:$("aiModel").value,b:$("aiBase").value,pi:$("aiPin").value,po:$("aiPout").value,fx:$("aiFx").value}));else localStorage.removeItem("revtitles_ia")}catch(e){}}
+try{const s=JSON.parse(localStorage.getItem("revtitles_ia")||"null");
+  if(s){$("aiProv").value=s.pv;aiProvMudou();$("aiKey").value=s.k||"";$("aiModel").value=s.m||"";$("aiBase").value=s.b||"";$("aiPin").value=s.pi||"";$("aiPout").value=s.po||"";$("aiFx").value=s.fx||"";$("aiMem").checked=true}else aiProvMudou()}catch(e){aiProvMudou()}
+async function okJson(r){if(!r.ok)throw new Error("HTTP "+r.status+" "+(await r.text()).slice(0,160));return r.json()}
+$("aiList").onclick=async()=>{
+  const k=$("aiKey").value.trim(),pv=$("aiProv").value;let ids=[];
+  try{
+    if(pv==="anthropic")ids=(await okJson(await fetch("https://api.anthropic.com/v1/models?limit=100",{headers:{"x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}}))).data.map(m=>m.id);
+    else if(pv==="gemini")ids=(await okJson(await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200",{headers:{"x-goog-api-key":k}}))).models
+      .filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace(/^models\//,""));
+    else ids=(await okJson(await fetch(baseUrl(pv)+"/models",{headers:k?{Authorization:"Bearer "+k}:{}}))).data.map(m=>m.id);
+    if(pv==="openrouter")ids.sort((a,b)=>(b.endsWith(":free")-a.endsWith(":free"))||a.localeCompare(b));
+    $("aiModels").innerHTML=ids.map(i=>`<option value="${esc(i)}">`).join("");
+    $("cmpStatus").textContent=`${ids.length} modelos disponíveis. Apague o campo Modelo e clique nele para ver a lista.`;
+  }catch(e){$("cmpStatus").textContent="Não consegui listar os modelos: "+e.message}
+};
+async function aiChamar(sys,user){
+  const pv=$("aiProv").value,key=$("aiKey").value.trim(),model=$("aiModel").value.trim();let url,headers,body;
+  if(pv==="anthropic"){url="https://api.anthropic.com/v1/messages";
+    headers={"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"};
+    body={model,max_tokens:4096,system:sys,messages:[{role:"user",content:user}]}}
+  else if(pv==="gemini"){url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+    headers={"content-type":"application/json","x-goog-api-key":key};
+    body={systemInstruction:{parts:[{text:sys}]},contents:[{role:"user",parts:[{text:user}]}],generationConfig:{maxOutputTokens:8192,responseMimeType:"application/json"}}}
+  else{url=baseUrl(pv)+"/chat/completions";headers={"content-type":"application/json"};if(key)headers.Authorization="Bearer "+key;
+    body={model,messages:[{role:"system",content:sys},{role:"user",content:user}]};
+    if(pv==="openai")body.max_completion_tokens=8000;else body.max_tokens=4096}
+  for(let t=1;t<=4;t++){
+    const r=await fetch(url,{method:"POST",headers,body:JSON.stringify(body)});
+    if(r.status===429||r.status===503){
+      const ra=r.headers.get("retry-after"),w=ra!==null&&!isNaN(+ra)?+ra:15*t;
+      $("cmpStatus").textContent=`Limite do serviço atingido; aguardando ${w}s…`;
+      await new Promise(z=>setTimeout(z,w*1000));if(CMP.parar)throw new Error("interrompido");continue}
+    const j=await okJson(r);let u=null;
+    if(pv==="anthropic"&&j.usage)u=[(j.usage.input_tokens||0)+(j.usage.cache_creation_input_tokens||0)+(j.usage.cache_read_input_tokens||0),j.usage.output_tokens||0];
+    else if(pv==="gemini"&&j.usageMetadata)u=[j.usageMetadata.promptTokenCount||0,(j.usageMetadata.candidatesTokenCount||0)+(j.usageMetadata.thoughtsTokenCount||0)];
+    else if(pv!=="anthropic"&&pv!=="gemini"&&j.usage)u=[j.usage.prompt_tokens||0,j.usage.completion_tokens||0];
+    CMP.uso.n++;if(u){CMP.uso.in+=u[0];CMP.uso.out+=u[1]}else CMP.uso.sem++;
+    if(pv==="anthropic")return(j.content||[]).map(b=>b.text||"").join("");
+    if(pv==="gemini")return((((j.candidates||[])[0]||{}).content||{}).parts||[]).map(x=>x.text||"").join("");
+    return(((j.choices||[])[0]||{}).message||{}).content||"";
+  }
+  throw new Error("limite de uso excedido (429). Tente de novo em alguns minutos.");
+}
+async function ia(P,T,al){
+  const pv=$("aiProv").value,N=Math.min(P.length,+$("aiMax").value||P.length),LOTE=PROV[pv].lote;CMP.parar=false;$("cmpStop").hidden=false;CMP.N=N;CMP.tot=P.length;CMP.feitas=0;
+  const sys=`Você é revisor sênior de legendas em português do Brasil (padrão Netflix pt-BR). Receberá uma lista JSON de legendas {id, pt${T?", en (original)":""}}. ${T?"Compare o português com o original, inclusive o uso de itálico (<i></i>). ":"Não há original: avalie só o português. "}Responda SOMENTE com um array JSON de objetos {"id":number,"categoria":"objetivo"|"subjetivo"|"sugestao","tipo":"rótulo curto","mensagem":"explicação curta em português","sugestao":"texto completo sugerido para a legenda pt"}.
+Categorias: "objetivo" = erro inequívoco, sem discussão (tradução que muda o sentido, número ou nome errado, informação importante omitida, erro de português). "subjetivo" = pode estar errado ou estranho (dúvida de sentido, registro, nuance, itálico divergente do original). "sugestao" = deixar o texto mais natural, fluido e agradável; use só nas legendas em que a melhoria for realmente boa (no máximo cerca de 1 a cada 8) e SEMPRE traga "sugestao".
+Na "sugestao" mantenha \\n entre linhas e <i></i> quando houver, no máximo 2 linhas de até 42 caracteres. Ignore espaços, pontuação e maiúsculas triviais (outra ferramenta cuida). Os tempos podem diferir um pouco entre original e tradução (legendas juntadas ou divididas): considere o conjunto. Não invente problemas: se a legenda está boa, não a liste. Nada além do JSON.`;
+  let falhas=0;
+  for(let k=0;k<N&&!CMP.parar;k+=LOTE){
+    $("cmpStatus").textContent=`IA analisando legendas ${k+1}–${Math.min(k+LOTE,N)} de ${N}…`;
+    const itens=[];for(let i=k;i<Math.min(k+LOTE,N);i++){const o={id:i,pt:P[i].linhas.join("\n")};if(T)o.en=al.rel[i].map(j=>T[j].linhas.join("\n")).join("\n");itens.push(o)}
+    try{
+      const txt=await aiChamar(sys,JSON.stringify(itens)),m=txt.match(/\[[\s\S]*\]/);
+      if(!m)throw new Error("resposta sem JSON");
+      for(const f of JSON.parse(m[0])){
+        const cat={objetivo:"obj",subjetivo:"sub",sugestao:"sug"}[f.categoria];if(!cat||f.id==null||!P[f.id])continue;
+        CMP.ach.push({id:CMP.nid++,cat,tipo:f.tipo||"IA",msg:f.mensagem||"",sug:f.sugestao||null,i:f.id,j:null,ia:true});
+      }
+      CMP.feitas=Math.min(k+LOTE,N);$("cmpUso").textContent=usoTxt();cmpMostrar();
+    }catch(e){
+      if(e.message==="interrompido")break;
+      if(/HTTP (400|401|403|404)/.test(e.message)||++falhas>=3){$("cmpStatus").textContent="Erro na IA: "+e.message;$("cmpUso").textContent=usoTxt();$("cmpStop").hidden=true;return}
+    }
+  }
+  $("cmpStop").hidden=true;$("cmpUso").textContent=usoTxt();
+  $("cmpStatus").textContent=(CMP.parar?"Análise interrompida. ":"Análise concluída. ")+`${CMP.ach.length} apontamentos.`;
+}
+async function cmpRun(){
+  const pv=$("aiProv").value;
+  if(!$("aiModel").value.trim()){$("cmpStatus").textContent="Informe o modelo (use Buscar modelos).";return}
+  if(pv!=="custom"&&!$("aiKey").value.trim()){$("cmpStatus").textContent="Informe a chave da API.";return}
+  aiSalvar();$("cmpGo").disabled=true;
+  const P=CMP.P.cues,T=CMP.T?CMP.T.cues:null,al=T?alinhar(T,P):null;
+  CMP.rel=al?al.rel:null;CMP.ach=[];CMP.dis=new Set();CMP.filtro.clear();CMP.lim=150;CMP.nid=0;CMP.uso={in:0,out:0,n:0,sem:0};$("cmpUso").textContent="";
+  $("cmpOut").hidden=false;cmpMostrar();
+  await ia(P,T,al);
+  $("cmpGo").disabled=false;
+}
+function cmpMostrar(){
+  CMP.acoes=[];const P=CMP.P.cues,T=CMP.T?CMP.T.cues:null,aP=CMP.P.arq,aT=CMP.T&&CMP.T.arq;
+  const vis=CMP.ach.filter(f=>!CMP.dis.has(f.id)),cont={};vis.forEach(f=>cont[f.cat]=(cont[f.cat]||0)+1);
+  const sel=vis.filter(f=>!CMP.filtro.size||CMP.filtro.has(f.cat));
+  $("cmpSum").textContent=`${P.length} legendas analisadas · ${new Set(vis.map(f=>f.i===null?"t"+f.j:f.i)).size} com apontamentos · ${vis.length} apontamentos`;
+  const cs=Object.keys(CATC).filter(k=>cont[k]);
+  $("cmpBar").innerHTML=cs.map(k=>`<span class="cc" style="--h:${CATC[k].h};flex:${cont[k]}"></span>`).join("");
+  $("cmpChips").innerHTML=`<button class="chip${CMP.filtro.size?"":" on"}" data-g="*">Todos <b>${vis.length}</b></button>`+
+    cs.map(k=>`<button class="chip cc${CMP.filtro.has(k)?" on":""}" style="--h:${CATC[k].h}" data-g="${k}">${CATC[k].n} <b>${cont[k]}</b></button>`).join("");
+  const grupos=new Map();
+  for(const f of sel){const k=f.i===null?"t"+f.j:"p"+f.i;if(!grupos.has(k))grupos.set(k,[]);grupos.get(k).push(f)}
+  const lista=[...grupos.values()].map(fs=>({fs,t:fs[0].i===null?T[fs[0].j].ini:P[fs[0].i].ini-(CMP.rel&&0)})).sort((a,b)=>a.t-b.t);
+  const ord=Object.keys(CATC);let html="",n=0,resta=0;
+  for(const {fs} of lista){
+    if(n>=CMP.lim){resta++;continue}n++;
+    const f0=fs[0],pc=f0.i===null?null:P[f0.i],ens=f0.i===null?[T[f0.j]]:(CMP.rel?CMP.rel[f0.i].map(j=>T[j]):[]);
+    fs.sort((a,b)=>ord.indexOf(a.cat)-ord.indexOf(b.cat));
+    const topo=fs[0].cat;
+    html+=`<div class="cue cc" style="--h:${CATC[topo].h}"><h3><span>${pc?`#${pc.num} · ${fmtA(aP,pc.ini)} → ${fmtA(aP,pc.fim)}`:`Template · ${fmtA(aT,ens[0].ini)}`}</span></h3>`+
+      (ens.length&&aT?`<div class="lbl">ORIGINAL</div><div class="txt en">${ens.map(c=>esc(c.linhas.join("\n"))).join("\n")}</div>`:"")+
+      (pc?`<div class="lbl">PORTUGUÊS</div><div class="txt">${esc(pc.linhas.join("\n"))}</div>`:"")+
+      fs.map(f=>`<div class="iss"><span class="tag cc" style="--h:${CATC[f.cat].h}">${CATC[f.cat].n.replace(/^\S+ /,"")} · ${esc(f.tipo)}</span>${esc(f.msg)}<button class="mini" data-c="${CMP.acoes.push({k:"x",id:f.id})-1}">Dispensar</button>`+
+        (f.sug?`<div class="sug">Sugestão:<div class="txt novo">${esc(f.sug)}</div><button class="mini ok" data-c="${CMP.acoes.push({k:"cp",t:f.sug})-1}">Copiar</button></div>`:"")+`</div>`).join("")+`</div>`;
+  }
+  if(resta)html+=`<div class="box"><button class="mini ok" data-c="${CMP.acoes.push({k:"mais"})-1}">Mostrar mais (${resta} legendas restantes)</button></div>`;
+  $("cmpList").innerHTML=html||`<div class="box">Nada encontrado aqui. 🎉</div>`;
+}
+$("cmpChips").onclick=e=>{const b=e.target.closest("button[data-g]");if(!b)return;const g=b.dataset.g;CMP.lim=150;
+  if(g==="*")CMP.filtro.clear();else if(CMP.filtro.has(g))CMP.filtro.delete(g);else CMP.filtro.add(g);cmpMostrar()};
+$("cmpList").onclick=e=>{const b=e.target.closest("button[data-c]");if(!b)return;const a=CMP.acoes[+b.dataset.c];if(!a)return;
+  if(a.k==="x"){CMP.dis.add(a.id);cmpMostrar()}
+  else if(a.k==="mais"){CMP.lim+=150;cmpMostrar()}
+  else if(a.k==="cp"){(navigator.clipboard?navigator.clipboard.writeText(a.t):Promise.reject()).then(()=>{b.textContent="Copiado ✔"}).catch(()=>{window.prompt("Copie o texto:",a.t)})}};
+$("cmpGo").onclick=cmpRun;
+$("cmpStop").onclick=()=>{CMP.parar=true};
+$("cmpRep").onclick=()=>{
+  const P=CMP.P.cues,T=CMP.T?CMP.T.cues:null,o=[];
+  for(const f of CMP.ach.filter(f=>!CMP.dis.has(f.id)).sort((a,b)=>(a.i??0)-(b.i??0))){
+    const c=f.i===null?T[f.j]:P[f.i];o.push(`#${c.num} [${CATC[f.cat].n} · ${f.tipo}${f.ia?" · IA":""}] ${f.msg}`+(f.sug?`\n   Sugestão: ${f.sug.replace(/\n/g," / ")}`:""))}
+  o.push("",usoTxt());baixar("comparacao_"+(CMP.P.nome.replace(/\.[^.]+$/,""))+".txt",o.join("\n"));
+};
+</script>
+</body>
+</html>
