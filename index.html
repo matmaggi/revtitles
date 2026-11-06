@@ -17,9 +17,10 @@ main{max-width:860px;margin:0 auto;padding:24px 16px 60px}
 h1{font-size:1.6rem;margin:0 0 4px}
 p.sub{color:var(--mut);margin:0 0 20px}
 .box{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:16px}
-#drop{border:2px dashed var(--bd);text-align:center;padding:32px 16px;cursor:pointer;border-radius:12px}
+#drop{border:2px dashed var(--bd);text-align:center;padding:10px 16px;font-size:.95rem;cursor:pointer;border-radius:12px}
 #drop.over{border-color:var(--ac)}
-#drop b{display:block;margin-bottom:4px}
+#drop b{display:block;margin-bottom:0}
+#drop span{font-size:.85rem}
 label.ck{display:block;margin:6px 0}
 button{background:var(--ac);color:var(--ac-tx);border:0;border-radius:8px;padding:10px 16px;font-size:1rem;cursor:pointer}
 button.sec{background:transparent;color:var(--tx);border:1px solid var(--bd)}
@@ -78,6 +79,13 @@ input.tx{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var
 .ia{font-size:.65rem;font-weight:700;border-radius:99px;padding:1px 6px;margin-left:6px;background:var(--ac);color:var(--ac-tx)}
 [hidden]{display:none!important}
 .uso{margin:6px 0 0;font-size:.9rem;font-weight:600}
+.ih{display:flex;gap:8px;align-items:flex-start}
+.ih .im{flex:1;min-width:0}
+.ih .mini{margin-left:auto;flex:none;white-space:nowrap}
+button.sm{padding:5px 12px;font-size:.9rem}
+.cps{font-weight:700;color:var(--mut)}
+.cps.alto{color:hsl(0 75% 48%)}
+@media (prefers-color-scheme:dark){.cps.alto{color:hsl(0 90% 72%)}}
 </style>
 </head>
 <body>
@@ -100,14 +108,14 @@ input.tx{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var
   <input type="file" id="file" accept=".srt,.dfxp,.pxtt,.ttml,.xml,.ttal,.json,.txt" hidden>
   <div style="margin-top:12px">
     <label class="ck"><input type="checkbox" id="optLT" checked> Verificar ortografia e gramática (usa a internet — serviço gratuito LanguageTool)</label>
-    <label class="ck"><input type="checkbox" id="optNames" checked> Ignorar palavras desconhecidas que começam com maiúscula (nomes próprios)</label>
+    <label class="ck"><input type="checkbox" id="optNames"> Ignorar palavras desconhecidas que começam com maiúscula (nomes próprios)</label>
+    <label class="ck"><input type="checkbox" id="optColq" checked> Avisar sobre linguagem muito coloquial (né, pra, tá…)</label>
   </div>
   <div class="row" style="margin:12px 0 4px">
     <label class="sl">Perfil <select id="perfil"><option value="17,0">Legenda comum, adulto (17 car./s)</option><option value="13,0">Legenda comum, infantil (13 car./s)</option><option value="20,1">SDH, adulto (20 car./s)</option><option value="17,1">SDH, infantil (17 car./s)</option></select></label>
     <label class="sl">Quadros/s <select id="fps"><option value="24">24 (23,976)</option><option value="25">25</option><option value="30">30 (29,97)</option></select></label>
+    <button id="go" disabled style="margin-left:8px">Revisar legenda</button>
   </div>
-  <label class="ck"><input type="checkbox" id="optColq"> Avisar sobre linguagem muito coloquial (né, pra, tá…)</label>
-  <div class="row" style="margin-top:12px"><button id="go" disabled>Revisar legenda</button></div>
   <div id="status"></div>
 </div>
 
@@ -117,10 +125,10 @@ input.tx{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var
     <div class="bar" id="bar"></div>
     <div class="chips" id="chips"></div>
     <div class="row" style="margin-top:10px">
-      <button class="sec" id="dlRep">Baixar relatório (.txt)</button>
-      <button class="sec" id="undo" disabled>↩ Desfazer</button>
-      <button class="sec" id="dlFix">Baixar legenda com minhas alterações</button>
-      <button class="sec" id="dlSrt" hidden>Baixar como .srt</button>
+      <button class="sec sm" id="dlRep">Baixar relatório (.txt)</button>
+      <button class="sec sm" id="undo" disabled>↩ Desfazer</button>
+      <button class="sec sm" id="dlFix">Baixar legenda com minhas alterações</button>
+      <button class="sec sm" id="dlSrt" hidden>Baixar como .srt</button>
     </div>
     <div style="color:var(--mut);font-size:.85rem;margin-top:8px">Para cada apontamento você decide: aplicar a sugestão (quando houver), ignorar o tipo ou editar o texto da legenda à mão. A legenda baixada reflete só o que você aplicou.</div>
     <details id="igd" hidden><summary id="igs"></summary><div id="igl"></div></details>
@@ -156,9 +164,9 @@ input.tx{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var
       <div class="row" style="margin-top:8px"><span class="sl">Preço por 1 milhão de tokens (US$):</span>
         <input class="tx" type="number" step="any" min="0" id="aiPin" placeholder="entrada" style="width:7em">
         <input class="tx" type="number" step="any" min="0" id="aiPout" placeholder="saída" style="width:7em">
-        <span class="sl">Cotação (R$ por US$):</span><input class="tx" type="number" step="any" min="0" id="aiFx" placeholder="ex.: 5,50" style="width:7em"></div>
+        </div>
       <div class="nota" id="aiPnote"></div>
-      <div class="row"><input class="tx" type="number" id="aiMax" placeholder="Só as N primeiras (teste)" min="1" style="width:13em"><label class="ck" style="margin:0"><input type="checkbox" id="aiMem"> Lembrar a chave neste navegador</label></div>
+      <div class="row"><label class="sl">CPS máximo <input class="tx" type="number" id="cmpCps" value="17" step="any" min="1" style="width:5em"></label><input class="tx" type="number" id="aiMax" placeholder="Só as N primeiras (teste)" min="1" style="width:13em"><label class="ck" style="margin:0"><input type="checkbox" id="aiMem"> Lembrar a chave neste navegador</label></div>
       <p style="color:var(--mut);font-size:.85rem;margin:8px 0 0">Os textos das legendas são enviados ao serviço escolhido. A chave fica só na memória desta página, a menos que você marque “lembrar”.</p>
     </div>
     <div class="row" style="margin-top:12px"><button id="cmpGo" disabled>Comparar com IA</button><button class="sec" id="cmpStop" hidden>Parar</button></div>
@@ -170,7 +178,7 @@ input.tx{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var
       <div id="cmpSum" style="font-weight:600"></div>
       <div class="bar" id="cmpBar"></div>
       <div class="chips" id="cmpChips"></div>
-      <div class="row"><button class="sec" id="cmpRep">Baixar relatório (.txt)</button></div>
+      <div class="row"><button class="sec sm" id="cmpRep">Baixar relatório (.txt)</button></div>
     </div>
     <div id="cmpList"></div>
   </div>
@@ -418,7 +426,7 @@ function tecnico(){
     else{
       if(d<5/6-0.002)p.push(["DURAÇÃO",`Duração de ${d.toFixed(2)}s; o mínimo da Netflix é 5/6 de segundo.`]);
       if(d>DUR_MAX+0.002)p.push(["DURAÇÃO",`Duração de ${d.toFixed(2)}s; o máximo é ${DUR_MAX}s.`]);
-      const cps=t.replace(/\n/g," ").length/d;
+      const cps=cpsVal(c.linhas.join("\n"),c);
       if(cps>cfg.cps+0.5)p.push(["LEITURA",`${Math.round(cps)} caracteres/s; o limite deste perfil é ${cfg.cps}.`]);
     }
     if(ant){
@@ -755,6 +763,11 @@ function aplicarTodas(ids){
 }
 const srtAtual=()=>cues.map((c,i)=>`${i+1}\n${fmt(c.ini)} --> ${fmt(c.fim)}\n${c.linhas.join("\n")}\n`).join("\n");
 
+// ---------- CPS (caracteres por segundo) ----------
+const fmt2=v=>v.toFixed(2).replace(".",",");
+function cpsVal(txt,c){const d=c.fim-c.ini;return d>0?txt.replace(TAG,"").replace(/\n/g," ").length/d:null}
+function cpsSpan(v,lim,tol){return v===null?"":`<span class="cps${v>lim+tol?" alto":""}">${fmt2(v)} cps</span>`}
+const cpsHtml=c=>{const s=cpsSpan(cpsVal(c.linhas.join("\n"),c),cfg.cps,0.5);return s?" · "+s:""};
 // ---------- exibição ----------
 const esc=s=>s.replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
 let ign={};   // valem só para a legenda carregada e voltam ao carregar outra
@@ -807,12 +820,12 @@ function mostrar(){
     shown++;
     const ks=[...new Set(sel.map(x=>x[0]))].sort((a,b)=>info(a).o-info(b).o);
     const ed=editando===i;
-    html+=`<div class="cue cc" style="--h:${info(ks[0]||"").h}"><h3><span>#${c.num} · ${fmtT(c.ini)} → ${fmtT(c.fim)}${c.pos==='top'?'<span class="badge">⬆ topo</span>':''}${c.forcada?'<span class="badge">narrativa forçada</span>':''}${ks.map(k=>`<span class="dot cc" style="--h:${info(k).h}"></span>`).join("")}</span>`+
+    html+=`<div class="cue cc" style="--h:${info(ks[0]||"").h}"><h3><span>#${c.num} · ${fmtT(c.ini)} → ${fmtT(c.fim)}${cpsHtml(c)}${c.pos==='top'?'<span class="badge">⬆ topo</span>':''}${c.forcada?'<span class="badge">narrativa forçada</span>':''}${ks.map(k=>`<span class="dot cc" style="--h:${info(k).h}"></span>`).join("")}</span>`+
       (ed?"":`<button class="mini" data-a="${reg({k:"edit",i})}">✏️ Editar texto</button>`)+`</h3>`+
       (ed?`<textarea id="ed${i}" class="ed" rows="3">${esc(c.linhas.join("\n"))}</textarea><div class="acts"><button class="mini ok" data-a="${reg({k:"salvar",i})}">Salvar</button><button class="mini" data-a="${reg({k:"cancelar",i})}">Cancelar</button></div>`
           :`<div class="txt">${destacar(c.linhas.join("\n"),sel)}</div>`+(c.nota?`<div class="nota">📝 ${esc(c.nota)}</div>`:""))+
       sel.map(x=>{const m=meta(x),inf=info(x[0]);
-        return `<div class="iss"><span class="tag cc" style="--h:${inf.h}">${esc(inf.n)}</span>${esc(x[1])}<button class="mini" data-a="${reg({k:"ign",key:m.key,label:m.label})}">${m.btn}</button>${sugHtml(i,x,reg)}</div>`}).join("")+`</div>`;
+        return `<div class="iss"><div class="ih"><span class="tag cc" style="--h:${inf.h}">${esc(inf.n)}</span><span class="im">${esc(x[1])}</span><button class="mini" data-a="${reg({k:"ign",key:m.key,label:m.label})}">${m.btn}</button></div>${sugHtml(i,x,reg)}</div>`}).join("")+`</div>`;
   }
   if(resta)html+=`<div class="box"><button class="mini ok" data-a="${reg({k:"mais"})}">Mostrar mais (${resta} legendas restantes)</button></div>`;
   $("list").innerHTML=html||`<div class="box">Nada encontrado aqui. 🎉</div>`;
@@ -931,13 +944,13 @@ $("aiModel").onchange=precoAuto;
 const nf=n=>Math.round(n).toLocaleString("pt-BR");
 const money=(v,s)=>s+" "+v.toFixed(v>=1?2:v>=0.01?3:4).replace(".",",");
 function usoTxt(){
-  const u=CMP.uso,pi=parseFloat($("aiPin").value),po=parseFloat($("aiPout").value),fx=parseFloat($("aiFx").value);
+  const u=CMP.uso,pi=parseFloat($("aiPin").value),po=parseFloat($("aiPout").value);
   let s=`Uso: ${nf(u.in)} tokens de entrada + ${nf(u.out)} de saída (${nf(u.in+u.out)} no total, ${u.n} pedido${u.n===1?"":"s"})`;
   if(u.sem)s+=` · ${u.sem} pedido(s) sem informação de uso`;
   if(isNaN(pi)||isNaN(po))return s+" · informe os preços para ver o custo em dinheiro.";
   const c=(u.in*pi+u.out*po)/1e6;
   if(c===0)return s+" · custo: US$ 0,00 (gratuito).";
-  const br=v=>money(v,"US$")+(fx>0?` (≈ ${money(v*fx,"R$")})`:"");
+  const br=v=>money(v,"US$");
   s+=` · custo ≈ ${br(c)}`;
   if(CMP.feitas>0){s+=` · ≈ ${br(c/CMP.feitas*100)} a cada 100 legendas`;
     if(CMP.feitas<CMP.tot)s+=` · para as ${CMP.tot} legendas, estimativa de ≈ ${br(c/CMP.feitas*CMP.tot)}`}
@@ -949,9 +962,9 @@ function aiProvMudou(){
   $("aiModel").value=p.modelo;$("aiNote").textContent=p.nota;$("aiModels").innerHTML="";precoAuto();
 }
 $("aiProv").onchange=aiProvMudou;
-function aiSalvar(){try{if($("aiMem").checked)localStorage.setItem("revtitles_ia",JSON.stringify({pv:$("aiProv").value,k:$("aiKey").value,m:$("aiModel").value,b:$("aiBase").value,pi:$("aiPin").value,po:$("aiPout").value,fx:$("aiFx").value}));else localStorage.removeItem("revtitles_ia")}catch(e){}}
+function aiSalvar(){try{if($("aiMem").checked)localStorage.setItem("revtitles_ia",JSON.stringify({pv:$("aiProv").value,k:$("aiKey").value,m:$("aiModel").value,b:$("aiBase").value,pi:$("aiPin").value,po:$("aiPout").value}));else localStorage.removeItem("revtitles_ia")}catch(e){}}
 try{const s=JSON.parse(localStorage.getItem("revtitles_ia")||"null");
-  if(s){$("aiProv").value=s.pv;aiProvMudou();$("aiKey").value=s.k||"";$("aiModel").value=s.m||"";$("aiBase").value=s.b||"";$("aiPin").value=s.pi||"";$("aiPout").value=s.po||"";$("aiFx").value=s.fx||"";$("aiMem").checked=true}else aiProvMudou()}catch(e){aiProvMudou()}
+  if(s){$("aiProv").value=s.pv;aiProvMudou();$("aiKey").value=s.k||"";$("aiModel").value=s.m||"";$("aiBase").value=s.b||"";$("aiPin").value=s.pi||"";$("aiPout").value=s.po||"";$("aiMem").checked=true}else aiProvMudou()}catch(e){aiProvMudou()}
 async function okJson(r){if(!r.ok)throw new Error("HTTP "+r.status+" "+(await r.text()).slice(0,160));return r.json()}
 $("aiList").onclick=async()=>{
   const k=$("aiKey").value.trim(),pv=$("aiProv").value;let ids=[];
@@ -1030,7 +1043,7 @@ async function cmpRun(){
   $("cmpGo").disabled=false;
 }
 function cmpMostrar(){
-  CMP.acoes=[];const P=CMP.P.cues,T=CMP.T?CMP.T.cues:null,aP=CMP.P.arq,aT=CMP.T&&CMP.T.arq;
+  CMP.acoes=[];const limC=+$("cmpCps").value||17;const P=CMP.P.cues,T=CMP.T?CMP.T.cues:null,aP=CMP.P.arq,aT=CMP.T&&CMP.T.arq;
   const vis=CMP.ach.filter(f=>!CMP.dis.has(f.id)),cont={};vis.forEach(f=>cont[f.cat]=(cont[f.cat]||0)+1);
   const sel=vis.filter(f=>!CMP.filtro.size||CMP.filtro.has(f.cat));
   $("cmpSum").textContent=`${P.length} legendas analisadas · ${new Set(vis.map(f=>f.i===null?"t"+f.j:f.i)).size} com apontamentos · ${vis.length} apontamentos`;
@@ -1047,11 +1060,11 @@ function cmpMostrar(){
     const f0=fs[0],pc=f0.i===null?null:P[f0.i],ens=f0.i===null?[T[f0.j]]:(CMP.rel?CMP.rel[f0.i].map(j=>T[j]):[]);
     fs.sort((a,b)=>ord.indexOf(a.cat)-ord.indexOf(b.cat));
     const topo=fs[0].cat;
-    html+=`<div class="cue cc" style="--h:${CATC[topo].h}"><h3><span>${pc?`#${pc.num} · ${fmtA(aP,pc.ini)} → ${fmtA(aP,pc.fim)}`:`Template · ${fmtA(aT,ens[0].ini)}`}</span></h3>`+
+    html+=`<div class="cue cc" style="--h:${CATC[topo].h}"><h3><span>${pc?`#${pc.num} · ${fmtA(aP,pc.ini)} → ${fmtA(aP,pc.fim)} · ${cpsSpan(cpsVal(pc.linhas.join("\n"),pc),limC,0.005)}`:`Template · ${fmtA(aT,ens[0].ini)}`}</span></h3>`+
       (ens.length&&aT?`<div class="lbl">ORIGINAL</div><div class="txt en">${ens.map(c=>esc(c.linhas.join("\n"))).join("\n")}</div>`:"")+
       (pc?`<div class="lbl">PORTUGUÊS</div><div class="txt">${esc(pc.linhas.join("\n"))}</div>`:"")+
-      fs.map(f=>`<div class="iss"><span class="tag cc" style="--h:${CATC[f.cat].h}">${CATC[f.cat].n.replace(/^\S+ /,"")} · ${esc(f.tipo)}</span>${esc(f.msg)}<button class="mini" data-c="${CMP.acoes.push({k:"x",id:f.id})-1}">Dispensar</button>`+
-        (f.sug?`<div class="sug">Sugestão:<div class="txt novo">${esc(f.sug)}</div><button class="mini ok" data-c="${CMP.acoes.push({k:"cp",t:f.sug})-1}">Copiar</button></div>`:"")+`</div>`).join("")+`</div>`;
+      fs.map(f=>`<div class="iss"><div class="ih"><span class="tag cc" style="--h:${CATC[f.cat].h}">${CATC[f.cat].n.replace(/^\S+ /,"")} · ${esc(f.tipo)}</span><span class="im">${esc(f.msg)}</span><button class="mini" data-c="${CMP.acoes.push({k:"x",id:f.id})-1}">Dispensar</button></div>`+
+        (f.sug?`<div class="sug">Sugestão${pc?` (${cpsSpan(cpsVal(f.sug,pc),limC,0.005)})`:""}:<div class="txt novo">${esc(f.sug)}</div><button class="mini ok" data-c="${CMP.acoes.push({k:"cp",t:f.sug})-1}">Copiar</button></div>`:"")+`</div>`).join("")+`</div>`;
   }
   if(resta)html+=`<div class="box"><button class="mini ok" data-c="${CMP.acoes.push({k:"mais"})-1}">Mostrar mais (${resta} legendas restantes)</button></div>`;
   $("cmpList").innerHTML=html||`<div class="box">Nada encontrado aqui. 🎉</div>`;
@@ -1063,6 +1076,7 @@ $("cmpList").onclick=e=>{const b=e.target.closest("button[data-c]");if(!b)return
   else if(a.k==="mais"){CMP.lim+=150;cmpMostrar()}
   else if(a.k==="cp"){(navigator.clipboard?navigator.clipboard.writeText(a.t):Promise.reject()).then(()=>{b.textContent="Copiado ✔"}).catch(()=>{window.prompt("Copie o texto:",a.t)})}};
 $("cmpGo").onclick=cmpRun;
+$("cmpCps").onchange=()=>{if(CMP.P&&!$("cmpOut").hidden)cmpMostrar()};
 $("cmpStop").onclick=()=>{CMP.parar=true};
 $("cmpRep").onclick=()=>{
   const P=CMP.P.cues,T=CMP.T?CMP.T.cues:null,o=[];
