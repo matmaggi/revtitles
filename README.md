@@ -32,7 +32,7 @@ A interface e as regras mudam conforme o idioma escolhido.
 - **Abreviações e siglas:** Sr., Dra., Prof. com ponto; unidades de medida sem ponto; siglas sem pontos (EUA).
 - **Palavras repetidas** ("eu eu").
 - **SDH:** avisa colchetes de efeitos sonoros e identificação de falantes fora do perfil SDH; minúsculas dentro dos colchetes.
-- **Consistência no arquivo:** nomes escritos de duas formas, tratamento misturado (tu/você, tú/usted/vos) e grafias diferentes.
+- **Consistência no arquivo** (versão em espanhol): nomes escritos de duas formas, tratamento misturado (tu/você, tú/usted/vos), grafias diferentes e concordância sujeito-verbo.
 - **Espanhol:** detecta vocabulário, expressões e interjeições da Espanha, leísmo, *vosotros* e pretérito perfeito composto.
 - **Ortografia e gramática online** (opcional), pelo serviço gratuito LanguageTool.
 
@@ -41,8 +41,9 @@ Compara a tradução com o template original, inclusive o itálico, e aponta:
 sentido incorreto, omissão, acréscimo, números e datas, nomes e termos, ortografia, gramática e concordância, pontuação, itálico, registro e tom, regionalismo, tradução literal, naturalidade e fluidez, concisão, humor e referências, e consistência.
 
 - **Níveis de detecção:** Leve (só erros claros), Médio (erros e dúvidas prováveis) e Pesado (inclui nuances e pequenas melhorias).
-- **Serviços de IA:** Claude (Anthropic), ChatGPT (OpenAI), Gemini (plano gratuito), Groq (plano gratuito), OpenRouter (modelos gratuitos) ou qualquer serviço compatível com a API da OpenAI (Ollama, LM Studio, Mistral, DeepSeek…).
-- **Buscar modelos:** lista os modelos disponíveis na sua conta.
+- **Serviços de IA:** Groq (plano gratuito, padrão), Gemini (plano gratuito), OpenRouter (modelos gratuitos), Claude (Anthropic), ChatGPT (OpenAI) ou qualquer serviço compatível com a API da OpenAI (Ollama, LM Studio, Mistral, DeepSeek…). A página lembra o último serviço escolhido.
+- **Configurações avançadas:** modelo, buscar modelos disponíveis na sua conta, endereço do servidor, preços por token e CPS máximo.
+- **Contexto entre lotes:** cada lote enviado à IA leva também as legendas vizinhas, para que frases divididas entre lotes sejam entendidas.
 - **Custo:** estimativa durante a análise e custo total ao final, com preços de referência editáveis.
 - Espera sozinho quando o limite de uso do serviço é atingido e avisa quando a resposta da IA foi cortada.
 - Sugestões que passariam de 42 caracteres por linha são descartadas.
@@ -56,7 +57,7 @@ sentido incorreto, omissão, acréscimo, números e datas, nomes e termos, ortog
 
 ### Exportação
 - Baixar a legenda com as suas alterações, no formato original ou em .srt.
-- Baixar um relatório (.txt) com todos os apontamentos.
+- Baixar o relatório com todos os apontamentos em TXT, HTML ou XLSX (Excel), tanto da revisão quanto do Comparador com IA.
 
 ## Privacidade
 A revisão automática roda no seu navegador. O texto só sai do computador se você usar o LanguageTool ou o Comparador com IA, e nesse caso vai apenas para o serviço escolhido. A chave de API fica salva só no seu navegador.
